@@ -1,0 +1,65 @@
+---
+import type { ViewModel } from '../lib/viewmodel';
+interface Props { vm: ViewModel; }
+const { vm } = Astro.props;
+const c = vm.contact;
+---
+<section id="contacto" style="position:relative;background:#08080a;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px);overflow:hidden">
+  <div style="position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:680px;height:380px;background:radial-gradient(ellipse at center,rgba(244,199,82,.1),transparent 70%);filter:blur(30px);pointer-events:none"></div>
+  <div style="position:relative;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(30px,5vw,56px)">
+    <div data-rev="up">
+      <div data-i18n="t.contact.kicker" style="font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:14px">{vm.t.contact.kicker}</div>
+      <h2 data-i18n="t.contact.title" style="font-family:var(--font-display);font-weight:700;font-size:clamp(30px,5vw,52px);line-height:1.02;letter-spacing:-1.2px;margin:0 0 16px;color:#F4EFE3">{vm.t.contact.title}</h2>
+      <p data-i18n="t.contact.sub" style="font-size:16px;line-height:1.65;color:#a09a8f;margin:0 0 30px;max-width:440px">{vm.t.contact.sub}</p>
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:420px">
+        <a href={vm.links.wa} target="_blank" rel="noopener" data-i18n-href="links.wa" class="contact-card" style="display:flex;align-items:center;gap:14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.02)">
+          <span style="width:40px;height:40px;border-radius:11px;background:rgba(37,211,102,.14);border:1px solid rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;color:#25D366;font-weight:700;font-size:17px">✆</span>
+          <span><span data-i18n="t.contact.wa" style="display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#7d786f">{vm.t.contact.wa}</span><span style="display:block;font-size:15.5px;font-weight:600;color:#ECE7DC">{c.phone}</span></span>
+        </a>
+        <a href={vm.links.ig} target="_blank" rel="noopener" class="contact-card" style="display:flex;align-items:center;gap:14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.02)">
+          <span style="width:40px;height:40px;border-radius:11px;background:rgba(226,168,46,.12);border:1px solid rgba(226,168,46,.4);display:flex;align-items:center;justify-content:center;color:#E2A82E;font-weight:700;font-size:17px">◎</span>
+          <span><span data-i18n="t.contact.ig" style="display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#7d786f">{vm.t.contact.ig}</span><span style="display:block;font-size:15.5px;font-weight:600;color:#ECE7DC">@{c.instagram}</span></span>
+        </a>
+        <a href={vm.links.mail} class="contact-card" style="display:flex;align-items:center;gap:14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.02)">
+          <span style="width:40px;height:40px;border-radius:11px;background:rgba(226,168,46,.12);border:1px solid rgba(226,168,46,.4);display:flex;align-items:center;justify-content:center;color:#E2A82E;font-weight:700;font-size:16px">✉</span>
+          <span style="min-width:0"><span data-i18n="t.contact.mail" style="display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#7d786f">{vm.t.contact.mail}</span><span style="display:block;font-size:14.5px;font-weight:600;color:#ECE7DC;word-break:break-all">{c.email}</span></span>
+        </a>
+      </div>
+    </div>
+
+    <div data-rev="fade" style="background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:clamp(24px,4vw,34px)">
+      <form id="contact-form" data-whatsapp={c.whatsapp} style="display:flex;flex-direction:column;gap:16px">
+        <label style="display:block">
+          <span data-i18n="t.contact.f_name" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.contact.f_name}</span>
+          <input id="c-name" type="text" class="c-input" />
+        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <label style="display:block">
+            <span data-i18n="t.contact.f_event" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.contact.f_event}</span>
+            <select id="c-event" class="c-input">
+              {vm.t.contact.evOpts.map((o, i) => (
+                <option data-i18n={`t.contact.evOpts.${i}`} style="background:#0c0c0f">{o}</option>
+              ))}
+            </select>
+          </label>
+          <label style="display:block">
+            <span data-i18n="t.contact.f_date" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.contact.f_date}</span>
+            <input id="c-date" type="text" placeholder="Ej. 15 dic 2026" class="c-input" />
+          </label>
+        </div>
+        <label style="display:block">
+          <span data-i18n="t.contact.f_msg" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.contact.f_msg}</span>
+          <textarea id="c-msg" rows="3" class="c-input" style="resize:vertical"></textarea>
+        </label>
+        <button type="submit" style="margin-top:4px;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:15.5px;font-family:inherit;padding:15px 24px;border:none;border-radius:12px;cursor:pointer;box-shadow:0 10px 30px rgba(226,168,46,.3)"><span data-i18n="t.contact.send">{vm.t.contact.send}</span> <span style="font-size:16px">→</span></button>
+        <p style="text-align:center;font-size:12.5px;color:#7d786f;margin:2px 0 0"><span data-i18n="t.contact.or">{vm.t.contact.or}</span> · <a href={vm.links.wa} target="_blank" rel="noopener" data-i18n-href="links.wa" style="color:#E2A82E;font-weight:600">WhatsApp</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-input { width: 100%; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.14); border-radius: 11px; padding: 13px 15px; color: #ECE7DC; font-family: inherit; font-size: 14.5px; outline: none; }
+  .c-input:focus { border-color: #E2A82E; }
+  .contact-card:hover { border-color: rgba(226,168,46,.45); }
+</style>
