@@ -48,7 +48,7 @@ const a = (accent: string) => accent;
 </section>
 
 <!-- MODAL DETALLE (oculto; poblado por package-modal.ts) -->
-<div id="pkg-modal" hidden style="position:fixed;inset:0;z-index:90;display:flex;justify-content:center;background:rgba(6,6,8,.72);backdrop-filter:blur(8px);overflow-y:auto">
+<div id="pkg-modal" hidden style="position:fixed;inset:0;z-index:90;justify-content:center;background:rgba(6,6,8,.72);backdrop-filter:blur(8px);overflow-y:auto">
   <div style="position:relative;width:100%;max-width:920px;margin:auto;min-height:100%;display:flex;flex-direction:column">
     <div id="pkg-modal-card" class="checker-bg" style="position:relative;border:1px solid rgba(226,168,46,.25);border-radius:26px;margin:18px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)">
       <div id="pkg-glow"></div>
@@ -86,4 +86,5 @@ const a = (accent: string) => accent;
 
 <style>
   .pkg-card:hover { border-color: rgba(226,168,46,.55); transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+  #pkg-modal:not([hidden]) { display: flex; }
 </style>
