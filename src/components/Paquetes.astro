@@ -1,0 +1,89 @@
+---
+import type { ViewModel } from '../lib/viewmodel';
+interface Props { vm: ViewModel; }
+const { vm } = Astro.props;
+const a = (accent: string) => accent;
+---
+<section id="paquetes" class="checker-bg" style="position:relative;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px);border-top:1px solid rgba(226,168,46,.1);border-bottom:1px solid rgba(226,168,46,.1)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div data-rev="up" style="text-align:center;max-width:640px;margin:0 auto 56px">
+      <div data-i18n="t.pkg.kicker" style="font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:14px">{vm.t.pkg.kicker}</div>
+      <h2 data-i18n="t.pkg.title" style="font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.4vw,46px);line-height:1.04;letter-spacing:-1px;margin:0 0 16px;color:#F4EFE3">{vm.t.pkg.title}</h2>
+      <p data-i18n="t.pkg.sub" style="font-size:16px;line-height:1.6;color:#a09a8f;margin:0">{vm.t.pkg.sub}</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;align-items:stretch">
+      {vm.packages.map((p, i) => (
+        <div class="pkg-card" data-package data-index={i} role="button" tabindex="0" style={`transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:30px 26px;cursor:pointer;overflow:hidden`}>
+          {p.popular && (
+            <div data-i18n="t.pkg.popular" data-i18n-prefix="★ " style={`position:absolute;top:18px;right:18px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:11px;letter-spacing:.5px;padding:6px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(226,168,46,.35)`}>★ {vm.t.pkg.popular}</div>
+          )}
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+            <div style={`font-family:var(--font-display);font-weight:700;font-size:13px;color:${p.accent};border:1px solid ${p.accent}66;border-radius:999px;width:30px;height:30px;display:flex;align-items:center;justify-content:center`}>{p.num}</div>
+            <div data-i18n={`packages.${i}.name`} style="font-family:var(--font-display);font-weight:600;font-size:24px;color:#F4EFE3">{p.name}</div>
+          </div>
+          <div style={`height:3px;border-radius:3px;width:54px;background:linear-gradient(90deg,${p.accent},rgba(255,255,255,0));margin-bottom:20px`}></div>
+          <p data-i18n={`packages.${i}.tag`} style="font-size:14.5px;line-height:1.55;color:#a09a8f;margin:0 0 22px;min-height:44px">{p.tag}</p>
+          {p.drone && (
+            <div data-i18n="t.pkg.droneTag" data-i18n-prefix="◆ " style={`display:inline-flex;align-items:center;gap:7px;background:${p.accent}1a;border:1px solid ${p.accent}66;color:${p.accent};font-weight:700;font-size:11.5px;letter-spacing:.5px;padding:6px 12px;border-radius:999px;margin-bottom:16px;width:fit-content`}>◆ {vm.t.pkg.droneTag}</div>
+          )}
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:22px">
+            <div data-i18n={`packages.${i}.price`} style={`font-family:var(--font-display);font-weight:700;font-size:clamp(30px,4vw,40px);line-height:1;color:${p.accent}`}>{p.price}</div>
+            <div data-i18n={`packages.${i}.priceNote`} style="font-size:12px;color:#7d786f;font-weight:500">{p.priceNote}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:11px;flex:1">
+            {p.preview.map((f, fi) => (
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.45;color:#cdc7bc">
+                <span style="color:#E2A82E;font-size:13px;margin-top:1px">✦</span><span data-i18n={`packages.${i}.preview.${fi}`}>{f}</span>
+              </div>
+            ))}
+            {p.hasExtra && (
+              <div data-i18n={`packages.${i}.extra`} style="font-size:13px;color:#7d786f;font-weight:600;padding-left:23px">{p.extra}</div>
+            )}
+          </div>
+          <button type="button" style={`margin-top:22px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;border:1px solid ${p.accent}55;color:${p.accent};font-weight:700;font-size:14.5px;font-family:inherit;padding:13px 18px;border-radius:12px;cursor:pointer`}><span data-i18n="t.pkg.cta">{vm.t.pkg.cta}</span> <span style="font-size:17px">→</span></button>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- MODAL DETALLE (oculto; poblado por package-modal.ts) -->
+<div id="pkg-modal" hidden style="position:fixed;inset:0;z-index:90;display:flex;justify-content:center;background:rgba(6,6,8,.72);backdrop-filter:blur(8px);overflow-y:auto">
+  <div style="position:relative;width:100%;max-width:920px;margin:auto;min-height:100%;display:flex;flex-direction:column">
+    <div id="pkg-modal-card" class="checker-bg" style="position:relative;border:1px solid rgba(226,168,46,.25);border-radius:26px;margin:18px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)">
+      <div id="pkg-glow"></div>
+      <button type="button" data-modal-close aria-label="Cerrar" style="position:absolute;top:20px;right:20px;z-index:5;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#ECE7DC;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+
+      <div style="position:relative;padding:clamp(30px,5vw,52px) clamp(24px,5vw,52px) clamp(28px,4vw,40px)">
+        <button type="button" data-modal-close style="background:none;border:none;color:#8b867c;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;padding:0;margin-bottom:24px;display:inline-flex;align-items:center;gap:7px"><span>←</span> <span id="pkg-back">{vm.t.pkg.back}</span></button>
+        <div id="pkg-chip" hidden></div>
+        <h2 id="pkg-name" style="font-family:var(--font-display);font-weight:700;font-size:clamp(36px,7vw,64px);line-height:1;letter-spacing:-1.5px;margin:14px 0 12px;color:#F7F2E6"></h2>
+        <p id="pkg-tag" style="font-size:clamp(15px,2vw,18.5px);line-height:1.55;color:#b6b0a4;max-width:560px;margin:0"></p>
+        <div style="display:flex;align-items:baseline;gap:10px;margin-top:26px">
+          <div id="pkg-price" style="font-family:var(--font-display);font-weight:700;font-size:clamp(38px,6vw,58px);line-height:1"></div>
+          <div id="pkg-price-note" style="font-size:13px;color:#7d786f;font-weight:500"></div>
+        </div>
+      </div>
+
+      <div style="position:relative;padding:0 clamp(24px,5vw,52px) clamp(34px,5vw,52px)">
+        <div id="pkg-includes" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:20px">{vm.t.pkg.includes}</div>
+        <div id="pkg-features" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 26px;margin-bottom:18px"></div>
+        <div id="pkg-drone" hidden style="margin-top:14px;position:relative;overflow:hidden;border:1px solid rgba(244,199,82,.3);border-radius:18px;background:linear-gradient(120deg,rgba(244,199,82,.08),rgba(255,255,255,.02));padding:22px 24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="width:9px;height:9px;border-radius:50%;background:#ff5a4d;box-shadow:0 0 10px #ff5a4d;animation:pulseDot 1.4s ease-in-out infinite"></span>
+            <span id="pkg-drone-hud" style="font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:1.5px;color:#F4C752"></span>
+          </div>
+          <div id="pkg-drone-sub" style="font-size:15px;line-height:1.55;color:#dcd6cb"></div>
+        </div>
+        <div style="margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;gap:16px">
+          <a id="pkg-reserve" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:16px;padding:16px 30px;border-radius:999px;box-shadow:0 12px 36px rgba(226,168,46,.32);text-decoration:none"><span id="pkg-reserve-label">{vm.t.pkg.reserve}</span> <span style="font-size:18px">→</span></a>
+          <span id="pkg-badge" style="font-size:13.5px;color:#8b867c"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pkg-card:hover { border-color: rgba(226,168,46,.55); transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+</style>
