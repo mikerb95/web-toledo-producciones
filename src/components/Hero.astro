@@ -1,0 +1,54 @@
+---
+import Equalizer from './Equalizer.astro';
+import type { ViewModel } from '../lib/viewmodel';
+interface Props { vm: ViewModel; }
+const { vm } = Astro.props;
+const heroBars = [
+  { h: 24, dur: 1.1, delay: -0.1 }, { h: 42, dur: 1.3, delay: -0.6 }, { h: 14, dur: 0.9, delay: -0.3 },
+  { h: 50, dur: 1.5, delay: -0.9 }, { h: 30, dur: 1.1, delay: -0.2 }, { h: 18, dur: 1, delay: -0.7 },
+  { h: 38, dur: 1.25, delay: -0.45 }, { h: 46, dur: 1.35, delay: -0.15 }, { h: 22, dur: 1.05, delay: -0.55 },
+  { h: 34, dur: 1.2, delay: -0.85 }, { h: 16, dur: 0.95, delay: -0.35 }, { h: 44, dur: 1.4, delay: -0.65 },
+];
+const tags = [vm.t.hero.tag1, vm.t.hero.tag2, vm.t.hero.tag3, vm.t.hero.tag4];
+---
+<header id="top" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px clamp(20px,5vw,40px) 80px;background-color:#0a0a0c;background-image:linear-gradient(135deg,rgba(255,255,255,.03) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.03) 75%),linear-gradient(45deg,rgba(255,255,255,.03) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.03) 75%);background-size:54px 54px;background-position:0 0,27px 27px">
+  <!-- light beams -->
+  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+    <div style="position:absolute;top:-30%;left:50%;width:160px;height:160%;background:linear-gradient(180deg,rgba(244,199,82,.22),transparent 70%);filter:blur(22px);transform-origin:top center;animation:beamSpin 26s linear infinite"></div>
+    <div style="position:absolute;top:-30%;left:50%;width:90px;height:160%;background:linear-gradient(180deg,rgba(120,180,255,.16),transparent 65%);filter:blur(18px);transform-origin:top center;animation:beamSpin 19s linear infinite reverse"></div>
+    <div style="position:absolute;top:-30%;left:50%;width:120px;height:160%;background:linear-gradient(180deg,rgba(226,120,210,.13),transparent 60%);filter:blur(20px);transform-origin:top center;animation:beamSpin 33s linear infinite"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%,transparent 40%,rgba(8,8,10,.7) 100%)"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:42%;background:linear-gradient(180deg,transparent,#08080a)"></div>
+  </div>
+
+  <div style="position:relative;z-index:2;max-width:1060px;width:100%;display:flex;flex-direction:column;align-items:center;text-align:center">
+    <div style="display:inline-flex;align-items:center;gap:9px;padding:7px 16px;border:1px solid rgba(226,168,46,.32);border-radius:999px;background:rgba(226,168,46,.06);font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:34px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#E2A82E;animation:pulseDot 1.8s ease-in-out infinite"></span><span data-i18n="hero.kicker">{vm.hero.kicker}</span>
+    </div>
+
+    <Equalizer bars={heroBars} width={7} height={54} gap={5} fill="linear-gradient(180deg,#fff,#bdb6a8)" radius={2} />
+
+    <h1 style="font-family:var(--font-display);font-weight:700;font-size:clamp(40px,8vw,92px);line-height:.98;letter-spacing:-2px;margin:18px 0 24px">
+      <span data-i18n="hero.title" style="display:block;background:linear-gradient(110deg,#FCE7A8 10%,#F4C752 30%,#fff 48%,#E2A82E 62%,#B97C1F 90%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:goldShimmer 6s linear infinite">{vm.hero.title}</span>
+    </h1>
+    <p data-i18n="hero.sub" style="max-width:680px;font-size:clamp(15px,1.7vw,18.5px);line-height:1.65;color:#b6b0a4;margin:0 0 40px">{vm.hero.sub}</p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center">
+      <a href="#paquetes" style="display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:15.5px;padding:15px 28px;border-radius:999px;box-shadow:0 10px 34px rgba(226,168,46,.34)"><span data-i18n="t.hero.cta1">{vm.t.hero.cta1}</span> <span style="font-size:17px">→</span></a>
+      <a href={vm.links.wa} target="_blank" rel="noopener" data-i18n="t.hero.cta2" data-i18n-href="links.wa" class="hero-cta2" style="display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(255,255,255,.22);color:#ECE7DC;font-weight:600;font-size:15.5px;padding:15px 28px;border-radius:999px;background:rgba(255,255,255,.03)">{vm.t.hero.cta2}</a>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(18px,4vw,44px);margin-top:54px;color:#8b867c;font-size:13px;font-weight:600;letter-spacing:.4px">
+      {tags.map((tag, i) => (
+        <span style="display:flex;align-items:center;gap:8px"><span style="width:5px;height:5px;border-radius:50%;background:#E2A82E"></span><span data-i18n={`t.hero.tag${i + 1}`}>{tag}</span></span>
+      ))}
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;color:#6f6a61;font-size:11px;letter-spacing:2px">
+    <span data-i18n="t.hero.scroll">{vm.t.hero.scroll}</span>
+    <span style="width:18px;height:28px;border:1.5px solid rgba(255,255,255,.2);border-radius:10px;position:relative;display:block"><span style="position:absolute;left:50%;top:5px;width:3px;height:6px;background:#E2A82E;border-radius:2px;transform:translateX(-50%);animation:scrollCue 1.8s ease-in-out infinite"></span></span>
+  </div>
+</header>
+
+<style>.hero-cta2:hover { border-color: rgba(226,168,46,.6); }</style>
