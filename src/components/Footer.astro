@@ -1,0 +1,37 @@
+---
+import type { ViewModel } from '../lib/viewmodel';
+interface Props { vm: ViewModel; }
+const { vm } = Astro.props;
+const c = vm.contact;
+---
+<footer class="checker-bg" style="position:relative;border-top:1px solid rgba(226,168,46,.16);padding:56px clamp(20px,5vw,48px) 30px;background-size:48px 48px;background-position:0 0,24px 24px">
+  <div style="max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:36px;justify-content:space-between;align-items:flex-start">
+    <div style="max-width:340px">
+      <div style="display:flex;align-items:flex-end;gap:9px;margin-bottom:14px">
+        <span class="gold-text" style="font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:-.5px">Toledo</span>
+        <span style="font-size:10px;letter-spacing:4px;font-weight:600;color:#9a948a;padding-bottom:4px">PRODUCCIONES</span>
+      </div>
+      <p data-i18n="t.footer.tagline" style="color:#8b867c;font-size:14px;line-height:1.6;margin:0">{vm.t.footer.tagline}</p>
+    </div>
+    <div style="display:flex;gap:clamp(28px,6vw,72px);flex-wrap:wrap">
+      <div>
+        <div data-i18n="t.footer.contact" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:14px">{vm.t.footer.contact}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:#c4beb3">
+          <a href={vm.links.tel} class="foot-link">{c.phone}</a>
+          <a href={vm.links.mail} class="foot-link">{c.email}</a>
+          <a href={vm.links.ig} target="_blank" rel="noopener" class="foot-link">@{c.instagram}</a>
+        </div>
+      </div>
+      <div>
+        <div data-i18n="t.footer.zone" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:14px">{vm.t.footer.zone}</div>
+        <div data-i18n="coverageCity" style="font-size:14px;color:#c4beb3;max-width:220px;line-height:1.6">{vm.coverageCity}</div>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1180px;margin:38px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:#6f6a61;font-size:12.5px">
+    <span>© 2026 Toledo Producciones · Bogotá, Colombia</span>
+    <span data-i18n="t.footer.slogan">{vm.t.footer.slogan}</span>
+  </div>
+</footer>
+
+<style>.foot-link:hover { color: #fff; }</style>
