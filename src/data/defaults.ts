@@ -86,7 +86,7 @@ export const DEFAULTS: SiteContent = {
       accent: '#C8A24A',
       popular: false,
       drone: false,
-      price: '1.200.000',
+      price: '1.000.000',
       priceNoteEs: 'COP · desde',
       priceNoteEn: 'COP · from',
       nameEs: 'Esencial',
