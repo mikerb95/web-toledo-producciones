@@ -2,3 +2,21 @@ Toledo Producciones-handoff/
 node_modules/
 dist/
 .astro/
+.vercel/
+
+# local database
+*.db
+*.db-journal
+local.db*
+
+# env
+.env
+.env.production
+.env*.local
+
+# logs
+npm-debug.log*
+*.log
+
+# macos
+.DS_Store
