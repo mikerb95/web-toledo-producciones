@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10131c"/>
+      <stop offset="55%" stop-color="#1a1410"/>
+      <stop offset="100%" stop-color="#0a0a0c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="#F4C752" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#F4C752" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#sky)"/>
+  <rect width="800" height="600" fill="url(#glow)"/>
+  <g opacity="0.5" stroke="#E2A82E" stroke-width="1.4" fill="none">
+    <path d="M0 470 L260 430 L420 460 L620 415 L800 445"/>
+    <path d="M0 520 L220 495 L460 520 L700 488 L800 505"/>
+  </g>
+  <g fill="#F4C752" opacity="0.85">
+    <circle cx="250" cy="360" r="2.5"/><circle cx="330" cy="395" r="2"/>
+    <circle cx="480" cy="350" r="2.5"/><circle cx="560" cy="400" r="2"/>
+    <circle cx="410" cy="420" r="2"/><circle cx="640" cy="370" r="2.5"/>
+  </g>
+  <text x="400" y="300" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="22" letter-spacing="2" fill="#9a948a">TOMA AÉREA 4K</text>
+</svg>
