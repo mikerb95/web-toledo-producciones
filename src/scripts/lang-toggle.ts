@@ -26,8 +26,9 @@ function applyLang(lang: Lang): void {
   // Reconstruye los chips de cobertura (lista dependiente del idioma).
   const chips = document.getElementById('coverage-chips');
   if (chips) {
+    const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     chips.innerHTML = vm.coverage
-      .map((c) => `<span style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(226,168,46,.28);background:rgba(226,168,46,.05);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;color:#d8d2c6"><span style="width:5px;height:5px;border-radius:50%;background:#E2A82E"></span>${c}</span>`)
+      .map((c) => `<span style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(226,168,46,.28);background:rgba(226,168,46,.05);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;color:#d8d2c6"><span style="width:5px;height:5px;border-radius:50%;background:#E2A82E"></span>${esc(c)}</span>`)
       .join('');
   }
 
