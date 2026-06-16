@@ -1,0 +1,20 @@
+---
+// Barras de ecualizador animadas (logo / hero / íconos).
+interface Bar { h: number; dur: number; delay: number; }
+interface Props {
+  bars: Bar[];
+  width?: number;
+  height?: number;
+  gap?: number;
+  fill?: string;       // color o gradiente CSS de cada barra
+  radius?: number;
+}
+const { bars, width = 3, height = 20, gap = 2.5, fill = '#fff', radius = 1 } = Astro.props;
+---
+<span class="eq" style={`display:flex;align-items:flex-end;gap:${gap}px;height:${height}px`}>
+  {bars.map((b) => (
+    <span
+      style={`width:${width}px;height:${b.h}px;background:${fill};border-radius:${radius}px;transform-origin:bottom;animation:eqbar ${b.dur}s ease-in-out ${b.delay}s infinite`}
+    ></span>
+  ))}
+</span>
