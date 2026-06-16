@@ -15,5 +15,8 @@
     "@astrojs/vercel": "^8.0.0",
     "@libsql/client": "^0.15.15",
     "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.4"
   }
 }
