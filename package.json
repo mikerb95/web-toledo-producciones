@@ -9,12 +9,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "db:push": "astro db push",
-    "db:seed": "astro db execute db/seed.ts"
+    "db:setup": "node --experimental-strip-types scripts/db-setup.ts"
   },
   "dependencies": {
-    "@astrojs/db": "^0.14.0",
     "@astrojs/vercel": "^8.0.0",
+    "@libsql/client": "^0.15.15",
     "astro": "^5.0.0"
   }
 }

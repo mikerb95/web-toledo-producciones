@@ -1,1 +1,4 @@
 Toledo Producciones-handoff/
+node_modules/
+dist/
+.astro/
