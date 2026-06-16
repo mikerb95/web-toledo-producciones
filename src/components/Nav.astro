@@ -1,0 +1,38 @@
+---
+import Equalizer from './Equalizer.astro';
+import type { ViewModel } from '../lib/viewmodel';
+interface Props { vm: ViewModel; }
+const { vm } = Astro.props;
+const navBars = [
+  { h: 8, dur: 1, delay: -0.1 }, { h: 16, dur: 1.1, delay: -0.5 }, { h: 11, dur: 0.9, delay: -0.3 },
+  { h: 19, dur: 1.2, delay: -0.7 }, { h: 9, dur: 1, delay: -0.2 },
+];
+---
+<nav style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(18px,4vw,48px);backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(8,8,10,.82),rgba(8,8,10,.35));border-bottom:1px solid rgba(226,168,46,.16)">
+  <a href="#top" style="display:flex;align-items:center;gap:11px">
+    <Equalizer bars={navBars} width={3} height={20} gap={2.5} fill="#fff" radius={1} />
+    <span class="gold-text" style="font-family:var(--font-display);font-weight:700;font-size:21px;letter-spacing:-.5px">Toledo</span>
+    <span style="font-size:9.5px;letter-spacing:4px;font-weight:600;color:#9a948a;align-self:flex-end;padding-bottom:3px">PRODUCCIONES</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:clamp(10px,2vw,26px)">
+    <div class="nav-links" style="display:flex;gap:clamp(10px,1.8vw,24px);font-size:14px;font-weight:500;color:#cdc7bc">
+      <a href="#servicios" style="opacity:.85" data-i18n="t.nav.servicios">{vm.t.nav.servicios}</a>
+      <a href="#paquetes" style="opacity:.85" data-i18n="t.nav.paquetes">{vm.t.nav.paquetes}</a>
+      <a href="#dron" style="opacity:.85" data-i18n="t.nav.dron">{vm.t.nav.dron}</a>
+      <a href="#galeria" style="opacity:.85" data-i18n="t.nav.galeria">{vm.t.nav.galeria}</a>
+      <a href="#contacto" style="opacity:.85" data-i18n="t.nav.contacto">{vm.t.nav.contacto}</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:1px;border:1px solid rgba(226,168,46,.3);border-radius:999px;padding:3px;font-size:12px;font-weight:700">
+      <button type="button" data-lang-btn="es" class="lang-btn">ES</button>
+      <button type="button" data-lang-btn="en" class="lang-btn">EN</button>
+    </div>
+    <a href={vm.links.wa} target="_blank" rel="noopener" data-i18n="t.nav.reservar" data-i18n-href="links.wa" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:999px;box-shadow:0 6px 22px rgba(226,168,46,.32)">{vm.t.nav.reservar}</a>
+    <a href="/admin" data-i18n="t.nav.admin" style="font-size:12px;color:#6f6a61;border:1px solid rgba(255,255,255,.12);padding:9px 12px;border-radius:999px">{vm.t.nav.admin}</a>
+  </div>
+</nav>
+
+<style>
+  .lang-btn { background: transparent; color: #9a948a; border: none; border-radius: 999px; padding: 5px 11px; cursor: pointer; font-weight: 700; }
+  .lang-btn[aria-pressed='true'] { background: linear-gradient(180deg, #F4C752, #D89A24); color: #1a1206; }
+  .nav-links a:hover { opacity: 1; }
+</style>
