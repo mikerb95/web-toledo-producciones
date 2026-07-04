@@ -10,7 +10,7 @@ const content = authed ? await getContent() : null;
 const bootstrap = authed ? JSON.stringify({ content, defaults: DEFAULTS }) : '';
 ---
 
-<Base title="Admin · Toledo Producciones">
+<Base title="Admin · Toledo Producciones" noindex>
   {!authed && (
     <div class="checker-bg" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background-size:54px 54px;background-position:0 0,27px 27px">
       <div style="width:100%;max-width:400px;animation:fadeUp .5s ease both">
