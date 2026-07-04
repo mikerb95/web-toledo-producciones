@@ -165,6 +165,9 @@ if (modal) {
     });
   });
 
+  $('pkg-c-name')?.addEventListener('input', updateReserveLink);
+  $('pkg-c-date')?.addEventListener('input', updateReserveLink);
+
   modal.querySelectorAll<HTMLElement>('[data-modal-close]').forEach((b) => b.addEventListener('click', close));
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
