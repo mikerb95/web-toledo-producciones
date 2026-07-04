@@ -13,6 +13,7 @@ try {
 } catch {}
 
 const { DEFAULTS } = await import('../src/data/defaults.ts');
+const { FINANCE_DDL } = await import('../src/lib/finance/schema.ts');
 
 const client = createClient({
   url: process.env.TURSO_DATABASE_URL || 'file:./local.db',
@@ -26,6 +27,9 @@ await client.execute(`
     updated_at TEXT NOT NULL
   )
 `);
+
+for (const ddl of FINANCE_DDL) await client.execute(ddl);
+console.log('✓ esquema de finanzas verificado (clients, contracts, transactions, attachments).');
 
 const existing = await client.execute('SELECT id FROM site_content WHERE id = 1');
 if (existing.rows.length === 0) {
