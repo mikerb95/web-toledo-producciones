@@ -56,6 +56,7 @@ const jsonLd = {
   </div>
 
   <script id="toledo-data" type="application/json" set:html={store} is:inline></script>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline></script>
 
   <script>
     import '../scripts/lang-toggle';
