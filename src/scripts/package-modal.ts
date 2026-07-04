@@ -4,12 +4,49 @@
 import { getStore, getLang } from './store';
 import type { Lang } from '../i18n/strings';
 import type { PackageVM } from '../lib/viewmodel';
+import { waLink, packageQuoteText } from '../lib/wa';
 
 const modal = document.getElementById('pkg-modal');
 if (modal) {
   const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T | null;
   let currentIndex = -1;
   let openCardEl: HTMLElement | null = null;
+  const selectedExtras = new Set<number>();
+
+  function updateReserveLink(): void {
+    const lang = getLang();
+    const vm = getStore()[lang];
+    const p = vm?.packages[currentIndex];
+    if (!p) return;
+    const name = ($('pkg-c-name') as HTMLInputElement | null)?.value.trim() || '';
+    const date = ($('pkg-c-date') as HTMLInputElement | null)?.value.trim() || '';
+    const extras = [...selectedExtras]
+      .filter((i) => i < vm.additionalServices.items.length)
+      .map((i) => vm.additionalServices.items[i]);
+    const text = packageQuoteText(lang, p.name, name, date, extras);
+    (($('pkg-reserve') as HTMLAnchorElement)).href = waLink(vm.contact.whatsapp, text);
+  }
+
+  function renderExtras(lang: Lang): void {
+    const vm = getStore()[lang];
+    const container = $('pkg-extras')!;
+    container.innerHTML = '';
+    vm.additionalServices.items.forEach((item, ei) => {
+      const label = document.createElement('label');
+      label.className = 'pkg-extra-chip';
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.checked = selectedExtras.has(ei);
+      input.addEventListener('change', () => {
+        if (input.checked) selectedExtras.add(ei); else selectedExtras.delete(ei);
+        updateReserveLink();
+      });
+      const span = document.createElement('span');
+      span.textContent = item;
+      label.append(input, span);
+      container.appendChild(label);
+    });
+  }
 
   function fill(index: number, lang: Lang): void {
     const vm = getStore()[lang];
