@@ -116,7 +116,23 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
           </div>
           <div id="pkg-drone-sub" style="font-size:15px;line-height:1.55;color:#dcd6cb"></div>
         </div>
-        <div style="margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;gap:16px">
+        <div id="pkg-form" style="margin-top:34px;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 26px;background:rgba(255,255,255,.03)">
+          <div id="pkg-customize" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:18px">{vm.t.pkg.customize}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px">
+            <label style="display:block">
+              <span id="pkg-f-name-label" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.pkg.f_name}</span>
+              <input id="pkg-c-name" type="text" placeholder={vm.t.pkg.f_namePh} class="c-input" />
+            </label>
+            <label style="display:block">
+              <span id="pkg-f-date-label" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.pkg.f_date}</span>
+              <input id="pkg-c-date" type="date" class="c-input" />
+            </label>
+          </div>
+          <div id="pkg-f-extras-label" style="font-size:12px;font-weight:600;color:#a8a293;margin-bottom:10px">{vm.t.pkg.f_extras}</div>
+          <div id="pkg-extras" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+        </div>
+
+        <div style="margin-top:24px;display:flex;flex-wrap:wrap;align-items:center;gap:16px">
           <a id="pkg-reserve" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:16px;padding:16px 30px;border-radius:999px;box-shadow:0 12px 36px rgba(226,168,46,.32);text-decoration:none"><span id="pkg-reserve-label">{vm.t.pkg.reserve}</span> <span style="font-size:18px">→</span></a>
           <span id="pkg-badge" style="font-size:13.5px;color:#8b867c"></span>
         </div>
