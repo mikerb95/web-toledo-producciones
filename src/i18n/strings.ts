@@ -15,7 +15,7 @@ export interface UIStrings {
   nav: { servicios: string; paquetes: string; dron: string; galeria: string; contacto: string; reservar: string; admin: string };
   hero: { cta1: string; cta2: string; tag1: string; tag2: string; tag3: string; tag4: string; scroll: string };
   serv: { kicker: string; title: string; sub: string; items: ServiceItem[] };
-  pkg: { kicker: string; title: string; sub: string; cta: string; popular: string; includes: string; reserve: string; from: string; back: string; droneTag: string };
+  pkg: { kicker: string; title: string; sub: string; cta: string; popular: string; includes: string; reserve: string; from: string; back: string; droneTag: string; customize: string; f_name: string; f_namePh: string; f_date: string; f_extras: string };
   drone: { kicker: string; title: string; sub: string; s1: string; s2: string; s3: string; s4: string; v1: string; v2: string; v3: string; v4: string; hud: string; cta: string };
   ev: { kicker: string; title: string; items: EventItem[] };
   gal: { kicker: string; title: string; sub: string; ph: string };
