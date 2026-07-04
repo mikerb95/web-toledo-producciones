@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets';
 import type { ViewModel } from '../lib/viewmodel';
-import dronImg from '../assets/dron-aerial.svg';
 interface Props { vm: ViewModel; }
 const { vm } = Astro.props;
 const d = vm.t.drone;
@@ -32,7 +30,7 @@ const stats = [
 
     <div data-rev="fade" style="position:relative">
       <div style="position:relative;width:100%;aspect-ratio:4/3;border-radius:20px;overflow:hidden;border:1px solid rgba(244,199,82,.28);box-shadow:0 30px 80px rgba(0,0,0,.5)">
-        <Image src={dronImg} alt="Toma aérea con dron" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+        <video src="/videos/drone.mp4" autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
         <!-- HUD overlay -->
         <div style="position:absolute;inset:0;pointer-events:none;z-index:3">
           <div style="position:absolute;top:14px;left:14px;width:30px;height:30px;border-left:2px solid rgba(244,199,82,.85);border-top:2px solid rgba(244,199,82,.85);border-top-left-radius:4px"></div>
