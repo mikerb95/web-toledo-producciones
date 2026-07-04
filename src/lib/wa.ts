@@ -33,6 +33,24 @@ export function packageText(lang: Lang, name: string): string {
     : `Hi Toledo Producciones, I am interested in the ${name} package ✨`;
 }
 
+// Mensaje de reserva de un paquete, con nombre, fecha y adicionales opcionales.
+export function packageQuoteText(
+  lang: Lang,
+  packageName: string,
+  clientName: string,
+  eventDate: string,
+  extras: string[],
+): string {
+  const es = lang === 'es';
+  let txt = es
+    ? `Hola Toledo Producciones, me interesa el paquete ${packageName} ✨`
+    : `Hi Toledo Producciones, I am interested in the ${packageName} package ✨`;
+  if (clientName) txt += '\n' + (es ? 'Nombre: ' : 'Name: ') + clientName;
+  if (eventDate) txt += '\n' + (es ? 'Fecha deseada: ' : 'Desired date: ') + eventDate;
+  if (extras.length) txt += '\n' + (es ? 'Adicionales: ' : 'Add-ons: ') + extras.join(', ');
+  return txt;
+}
+
 // Enlaces principales precomputados para una vista dada.
 export function contactLinks(contact: Contact, lang: Lang) {
   return {
