@@ -153,6 +153,10 @@ root.addEventListener('input', (e) => {
     p[el.dataset.field!] = (el as HTMLInputElement).type === 'checkbox' ? (el as HTMLInputElement).checked : el.value;
   } else if (scope === 'feat') {
     (data.packages[+el.dataset.idx!] as any)[el.dataset.field!][+el.dataset.fi!] = el.value;
+  } else if (scope === 'extra') {
+    (data.additionalServices as any)[el.dataset.field!] = el.value;
+  } else if (scope === 'extrafeat') {
+    (data.additionalServices as any)[el.dataset.field!][+el.dataset.fi!] = el.value;
   } else if (scope === 'hero') {
     (data.hero as any)[el.dataset.lang!][el.dataset.field!] = el.value;
   } else if (scope === 'contact') {
