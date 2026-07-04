@@ -1,5 +1,7 @@
 # Toledo Producciones
 
+![Design: Mikerb95](https://img.shields.io/badge/Design-Mikerb95-181717?style=for-the-badge&logo=github&logoColor=white)
+
 Sitio web de Toledo Producciones — productora de eventos en Bogotá (DJ, sonido,
 iluminación, show láser, luces robóticas, cubrimiento 4K y cubrimiento en dron).
 
