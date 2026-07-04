@@ -1,0 +1,39 @@
+---
+import type { ViewModel } from '../lib/viewmodel';
+interface Props { vm: ViewModel; }
+const { vm } = Astro.props;
+---
+<a
+  href={vm.links.wa}
+  target="_blank"
+  rel="noopener"
+  data-i18n-href="links.wa"
+  aria-label="WhatsApp"
+  class="wa-badge"
+>
+  <svg viewBox="0 0 24 24" width="30" height="30" fill="#fff" aria-hidden="true">
+    <path d="M17.47 14.38c-.29-.15-1.71-.85-1.98-.94-.27-.1-.46-.15-.66.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.07-.29-.15-1.22-.45-2.32-1.43-.86-.76-1.44-1.71-1.61-2-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.07-.15-.66-1.59-.9-2.18-.24-.57-.48-.5-.66-.51h-.56c-.2 0-.51.07-.78.37s-1.03 1.01-1.03 2.46 1.06 2.85 1.2 3.05c.15.2 2.09 3.19 5.06 4.47.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.71-.7 1.95-1.37.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.34z"/>
+    <path d="M12.01 2C6.49 2 2 6.48 2 11.99c0 1.93.55 3.79 1.6 5.41L2.05 22l4.72-1.51a10.02 10.02 0 0 0 5.24 1.47h.01c5.52 0 10-4.48 10-9.99C22.03 6.48 17.53 2 12.01 2zm5.85 15.83a8.29 8.29 0 0 1-5.86 2.42h-.01a8.34 8.34 0 0 1-4.25-1.16l-.3-.18-2.8.9.9-2.72-.2-.28a8.28 8.28 0 0 1-1.28-4.42c0-4.6 3.75-8.34 8.35-8.34a8.29 8.29 0 0 1 5.9 2.44 8.27 8.27 0 0 1 2.44 5.9c0 4.6-3.74 8.35-8.34 8.35z"/>
+  </svg>
+</a>
+
+<style>
+  .wa-badge {
+    position: fixed;
+    right: clamp(16px, 3vw, 28px);
+    bottom: clamp(16px, 3vw, 28px);
+    z-index: 50;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+    transition: transform 0.2s ease;
+  }
+  .wa-badge:hover {
+    transform: scale(1.08);
+  }
+</style>
