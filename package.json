@@ -12,6 +12,7 @@
     "db:setup": "tsx scripts/db-setup.ts"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^8.0.0",
     "@libsql/client": "^0.15.15",
     "astro": "^5.0.0"

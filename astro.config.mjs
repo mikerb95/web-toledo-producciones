@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 
 // SSR en Vercel: el sitio público y el admin leen el contenido desde la BD
 // (Turso/libSQL) en cada request, de modo que las ediciones del panel se
@@ -11,4 +12,9 @@ export default defineConfig({
     imageService: true,
   }),
   site: 'https://toledoproducciones.org',
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/admin') && !page.includes('/api/'),
+    }),
+  ],
 });
