@@ -11,6 +11,7 @@ interface ImportMetaEnv {
   readonly SESSION_SECRET: string;
   readonly TURSO_DATABASE_URL: string;
   readonly TURSO_AUTH_TOKEN: string;
+  readonly BLOB_READ_WRITE_TOKEN: string;
 }
 
 interface ImportMeta {
