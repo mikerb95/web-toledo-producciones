@@ -1,0 +1,38 @@
+/* Estilos compartidos por las páginas del panel de administración
+   (/admin y /admin/finanzas): tema oscuro con acentos dorados. */
+.adm-input { width: 100%; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.14); border-radius: 11px; padding: 13px 15px; color: #ECE7DC; font-size: 14.5px; outline: none; font-family: inherit; }
+.adm-input:focus { border-color: #E2A82E; }
+.adm-nav { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; font-family: inherit; text-align: left; padding: 11px 13px; border-radius: 11px; cursor: pointer; border: 1px solid transparent; background: transparent; color: #9a948a; text-decoration: none; }
+.adm-nav[aria-current='true'] { background: linear-gradient(180deg, rgba(244,199,82,.16), rgba(226,168,46,.06)); color: #F4C752; border-color: rgba(226,168,46,.3); }
+.adm-side-btn { display: flex; align-items: center; gap: 9px; color: #cdc7bc; font-size: 13.5px; font-weight: 600; background: none; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.1); cursor: pointer; text-align: left; text-decoration: none; font-family: inherit; }
+.adm-side-btn:hover { border-color: rgba(226,168,46,.4); }
+.adm-card { background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)); border: 1px solid rgba(255,255,255,.1); border-radius: 18px; }
+.adm-lbl { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .4px; color: #8b867c; margin-bottom: 7px; text-transform: uppercase; }
+.adm-field { width: 100%; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.13); border-radius: 10px; padding: 11px 13px; color: #ECE7DC; font-size: 14px; outline: none; font-family: inherit; }
+.adm-field:focus { border-color: #E2A82E; }
+.adm-field-sm { flex: 1; min-width: 0; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.13); border-radius: 9px; padding: 9px 11px; color: #ECE7DC; font-size: 13px; outline: none; font-family: inherit; }
+.adm-del { flex-shrink: 0; width: 30px; height: 30px; border-radius: 8px; background: rgba(255,138,125,.08); border: 1px solid rgba(255,138,125,.25); color: #ff8a7d; cursor: pointer; font-size: 12px; }
+.adm-add { margin-top: 2px; align-self: flex-start; background: rgba(226,168,46,.08); border: 1px dashed rgba(226,168,46,.4); color: #E2C277; font-size: 12.5px; font-weight: 600; padding: 8px 12px; border-radius: 9px; cursor: pointer; font-family: inherit; }
+.adm-swatch { width: 30px; height: 30px; border-radius: 8px; cursor: pointer; }
+
+/* ── Finanzas ─────────────────────────────────────────────────────── */
+.adm-select { width: 100%; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.13); border-radius: 10px; padding: 11px 13px; color: #ECE7DC; font-size: 14px; outline: none; font-family: inherit; }
+.adm-select:focus { border-color: #E2A82E; }
+.adm-btn-primary { font-size: 14px; font-weight: 700; color: #1a1206; background: linear-gradient(180deg,#F4C752,#D89A24); border: none; padding: 11px 20px; border-radius: 10px; cursor: pointer; box-shadow: 0 8px 22px rgba(226,168,46,.28); font-family: inherit; }
+.adm-btn-ghost { font-size: 13px; font-weight: 600; color: #9a948a; background: none; border: 1px solid rgba(255,255,255,.12); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-family: inherit; }
+.adm-btn-ghost:hover { border-color: rgba(226,168,46,.4); color: #E2C277; }
+.adm-tile { background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 18px 20px; }
+.adm-tile-lbl { font-size: 11.5px; font-weight: 600; letter-spacing: .4px; color: #8b867c; text-transform: uppercase; margin-bottom: 8px; }
+.adm-tile-val { font-family: var(--font-display); font-weight: 700; font-size: 24px; color: #F4EFE3; }
+.adm-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.adm-table th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; color: #8b867c; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.1); }
+.adm-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,.06); color: #ECE7DC; vertical-align: middle; }
+.adm-table tbody tr:hover { background: rgba(255,255,255,.02); }
+.adm-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; }
+.adm-pill-pendiente { background: rgba(226,168,46,.14); color: #E2C277; }
+.adm-pill-pagado { background: rgba(96,200,140,.14); color: #7fd9a8; }
+.adm-pill-vencido { background: rgba(255,138,125,.14); color: #ff8a7d; }
+.adm-amt-in { color: #7fd9a8; font-weight: 700; }
+.adm-amt-out { color: #ff8a7d; font-weight: 700; }
+.adm-icon-btn { background: none; border: 1px solid rgba(255,255,255,.12); color: #9a948a; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 13px; }
+.adm-icon-btn:hover { border-color: rgba(226,168,46,.4); color: #E2C277; }
