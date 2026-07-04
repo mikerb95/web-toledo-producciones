@@ -46,12 +46,20 @@ export interface Package {
   featuresEn: string[];
 }
 
+export interface AdditionalServices {
+  titleEs: string;
+  titleEn: string;
+  itemsEs: string[];
+  itemsEn: string[];
+}
+
 export interface SiteContent {
   version: number;
   contact: Contact;
   hero: Hero;
   coverage: Coverage;
   packages: Package[];
+  additionalServices: AdditionalServices;
 }
 
 export const DEFAULTS: SiteContent = {
