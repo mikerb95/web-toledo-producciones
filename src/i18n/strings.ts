@@ -41,7 +41,7 @@ const es: UIStrings = {
       { t: 'Cubrimiento en dron', d: 'Tomas aéreas cinematográficas que cuentan tu evento desde otra perspectiva.' },
     ],
   },
-  pkg: { kicker: 'Paquetes', title: 'Elige cómo quieres brillar', sub: 'Tres producciones pensadas para cada tipo de celebración. Toca un paquete para ver todo lo que incluye.', cta: 'Ver detalle', popular: 'Más elegido', includes: 'Incluye', reserve: 'Reservar este paquete', from: 'desde', back: 'Volver a paquetes', droneTag: 'Con cubrimiento en DRON' },
+  pkg: { kicker: 'Paquetes', title: 'Elige cómo quieres brillar', sub: 'Tres producciones pensadas para cada tipo de celebración. Toca un paquete para ver todo lo que incluye.', cta: 'Ver detalle', popular: 'Más elegido', includes: 'Incluye', reserve: 'Reservar este paquete', from: 'desde', back: 'Volver a paquetes', droneTag: 'Con cubrimiento en DRON', customize: 'Arma tu reserva', f_name: 'Tu nombre', f_namePh: 'Ej. Juan Pérez', f_date: 'Fecha deseada del evento', f_extras: 'Adicionales' },
   drone: {
     kicker: 'Diferencial Élite',
     title: 'Tu evento desde el cielo',
@@ -86,7 +86,7 @@ const en: UIStrings = {
       { t: 'Drone coverage', d: 'Cinematic aerial shots that tell your event from another perspective.' },
     ],
   },
-  pkg: { kicker: 'Packages', title: 'Choose how you want to shine', sub: 'Three productions designed for every kind of celebration. Tap a package to see everything it includes.', cta: 'See detail', popular: 'Most chosen', includes: 'Includes', reserve: 'Book this package', from: 'from', back: 'Back to packages', droneTag: 'With DRONE coverage' },
+  pkg: { kicker: 'Packages', title: 'Choose how you want to shine', sub: 'Three productions designed for every kind of celebration. Tap a package to see everything it includes.', cta: 'See detail', popular: 'Most chosen', includes: 'Includes', reserve: 'Book this package', from: 'from', back: 'Back to packages', droneTag: 'With DRONE coverage', customize: 'Build your booking', f_name: 'Your name', f_namePh: 'E.g. John Smith', f_date: 'Desired event date', f_extras: 'Add-ons' },
   drone: {
     kicker: 'Elite differentiator',
     title: 'Your event from the sky',
