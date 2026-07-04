@@ -32,6 +32,7 @@ export interface ViewModel {
   coverage: string[];
   coverageCity: string;
   packages: PackageVM[];
+  additionalServices: { title: string; items: string[] };
   events: { t: string; d: string }[];
   links: { wa: string; ig: string; mail: string; tel: string };
 }
