@@ -71,7 +71,25 @@ function renderPaquetes() {
           ${featCol(i, 'featuresEn', 'Includes (EN)', '+ Add feature', p.featuresEn)}
         </div>
       </div>
-    </div>`).join('')}</div>`;
+    </div>`).join('')}
+    <div class="adm-card" style="padding:22px 22px 24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        ${field('Título servicios adicionales (ES)', 'extra', `data-field="titleEs"`, data.additionalServices.titleEs)}
+        ${field('Título servicios adicionales (EN)', 'extra', `data-field="titleEn"`, data.additionalServices.titleEn)}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        ${extraCol('itemsEs', 'Servicios (ES)', '+ Agregar servicio', data.additionalServices.itemsEs)}
+        ${extraCol('itemsEn', 'Services (EN)', '+ Add service', data.additionalServices.itemsEn)}
+      </div>
+    </div>
+  </div>`;
+}
+
+function extraCol(fieldName: 'itemsEs' | 'itemsEn', label: string, addLabel: string, items: string[]) {
+  return `<div><span class="adm-lbl">${label}</span><div style="display:flex;flex-direction:column;gap:8px">
+    ${items.map((f, fi) => `<div style="display:flex;gap:7px;align-items:center"><input type="text" class="adm-field-sm" data-scope="extrafeat" data-field="${fieldName}" data-fi="${fi}" value="${esc(f)}" /><button type="button" class="adm-del" data-action="delextrafeat" data-field="${fieldName}" data-fi="${fi}">✕</button></div>`).join('')}
+    <button type="button" class="adm-add" data-action="addextrafeat" data-field="${fieldName}">${addLabel}</button>
+  </div></div>`;
 }
 
 function featCol(idx: number, fieldName: string, label: string, addLabel: string, items: string[]) {
