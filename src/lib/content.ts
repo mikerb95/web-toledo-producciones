@@ -19,6 +19,10 @@ function normalize(raw: Partial<SiteContent> | null | undefined): SiteContent {
       en: raw.coverage?.en ?? DEFAULTS.coverage.en,
     },
     packages: Array.isArray(raw.packages) && raw.packages.length ? raw.packages : DEFAULTS.packages,
+    additionalServices: {
+      ...DEFAULTS.additionalServices,
+      ...(raw.additionalServices || {}),
+    },
   };
 }
 
