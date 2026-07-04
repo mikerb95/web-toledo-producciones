@@ -10,5 +10,5 @@ export default defineConfig({
   adapter: vercel({
     imageService: true,
   }),
-  site: 'https://toledoproducciones.com',
+  site: 'https://toledoproducciones.org',
 });
