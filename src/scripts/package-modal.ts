@@ -30,6 +30,10 @@ if (modal) {
     $('pkg-price-note')!.textContent = p.priceNote;
     $('pkg-badge')!.textContent = p.badge;
 
+    document.querySelectorAll<HTMLElement>('[data-pkg-photo]').forEach((el) => {
+      el.hidden = el.dataset.pkgPhoto !== p.id;
+    });
+
     $('pkg-glow')!.setAttribute(
       'style',
       `position:absolute;top:-120px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,${a}33,transparent 65%);filter:blur(40px);pointer-events:none`,
