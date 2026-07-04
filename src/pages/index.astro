@@ -20,6 +20,25 @@ const content = await getContent();
 const vmEs = buildVM(content, 'es');
 const vmEn = buildVM(content, 'en');
 const store = JSON.stringify({ es: vmEs, en: vmEn });
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EventPlanningService',
+  name: 'Toledo Producciones',
+  description:
+    'Producción de eventos en Bogotá: DJ, sonido, iluminación, show láser, luces robóticas, cubrimiento 4K y cubrimiento en dron.',
+  url: 'https://toledoproducciones.org',
+  telephone: `+${content.contact.whatsapp}`,
+  email: content.contact.email,
+  image: 'https://toledoproducciones.org/og-image.jpg',
+  areaServed: content.coverage.es.map((city) => ({ '@type': 'City', name: city })),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Bogotá',
+    addressCountry: 'CO',
+  },
+  sameAs: [`https://www.instagram.com/${content.contact.instagram}`],
+};
 ---
 
 <Base>
