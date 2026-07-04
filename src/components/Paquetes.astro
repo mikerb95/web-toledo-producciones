@@ -1,8 +1,20 @@
 ---
+import { Image } from 'astro:assets';
 import type { ViewModel } from '../lib/viewmodel';
+import esencial1 from '../assets/packages/esencial-1.jpeg';
+import esencial2 from '../assets/packages/esencial-2.jpeg';
+import estelar1 from '../assets/packages/estelar-1.jpeg';
+import estelar2 from '../assets/packages/estelar-2.jpeg';
+import elite1 from '../assets/packages/elite-1.jpeg';
+import elite2 from '../assets/packages/elite-2.jpeg';
 interface Props { vm: ViewModel; }
 const { vm } = Astro.props;
 const a = (accent: string) => accent;
+const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
+  esencial: [esencial1, esencial2],
+  estelar: [estelar1, estelar2],
+  elite: [elite1, elite2],
+};
 ---
 <section id="paquetes" class="checker-bg" style="position:relative;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px);border-top:1px solid rgba(226,168,46,.1);border-bottom:1px solid rgba(226,168,46,.1)">
   <div style="max-width:1180px;margin:0 auto">
@@ -13,7 +25,12 @@ const a = (accent: string) => accent;
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;align-items:stretch">
       {vm.packages.map((p, i) => (
-        <div class="pkg-card" data-package data-index={i} role="button" tabindex="0" style={`transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:30px 26px;cursor:pointer;overflow:hidden`}>
+        <div class="pkg-card" data-package data-index={i} role="button" tabindex="0" style={`transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:0 0 30px;cursor:pointer;overflow:hidden`}>
+          <div style="position:relative;width:100%;aspect-ratio:16/10;overflow:hidden">
+            <Image src={PHOTOS[p.id][0]} alt={p.name} width={580} height={363} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,9,7,.85))"></div>
+          </div>
+          <div style="padding:22px 26px 0;display:flex;flex-direction:column;flex:1">
           {p.popular && (
             <div data-i18n="t.pkg.popular" data-i18n-prefix="★ " style={`position:absolute;top:18px;right:18px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:11px;letter-spacing:.5px;padding:6px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(226,168,46,.35)`}>★ {vm.t.pkg.popular}</div>
           )}
