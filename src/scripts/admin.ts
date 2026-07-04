@@ -180,16 +180,23 @@ root.addEventListener('click', (e) => {
   const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-action]');
   if (!btn) return;
   const action = btn.dataset.action;
+  const fieldName = btn.dataset.field as 'featuresEs' | 'featuresEn' | 'itemsEs' | 'itemsEn';
+  if (action === 'addextrafeat') {
+    data.additionalServices[fieldName as 'itemsEs' | 'itemsEn'].push(fieldName.endsWith('Es') ? 'Nuevo servicio' : 'New service');
+    markDirty(); renderPaquetes(); return;
+  } else if (action === 'delextrafeat') {
+    data.additionalServices[fieldName as 'itemsEs' | 'itemsEn'].splice(+btn.dataset.fi!, 1);
+    markDirty(); renderPaquetes(); return;
+  }
   const idx = +btn.dataset.idx!;
-  const fieldName = btn.dataset.field as 'featuresEs' | 'featuresEn';
   if (action === 'accent') {
     data.packages[idx].accent = btn.dataset.color!;
     markDirty(); renderPaquetes();
   } else if (action === 'addfeat') {
-    data.packages[idx][fieldName].push(fieldName.endsWith('Es') ? 'Nueva característica' : 'New feature');
+    data.packages[idx][fieldName as 'featuresEs' | 'featuresEn'].push(fieldName.endsWith('Es') ? 'Nueva característica' : 'New feature');
     markDirty(); renderPaquetes();
   } else if (action === 'delfeat') {
-    data.packages[idx][fieldName].splice(+btn.dataset.fi!, 1);
+    data.packages[idx][fieldName as 'featuresEs' | 'featuresEn'].splice(+btn.dataset.fi!, 1);
     markDirty(); renderPaquetes();
   }
 });
