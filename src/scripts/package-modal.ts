@@ -109,8 +109,14 @@ if (modal) {
       drone.hidden = true;
     }
 
-    const reserve = $('pkg-reserve') as HTMLAnchorElement;
-    reserve.href = p.waLink;
+    $('pkg-customize')!.textContent = t.pkg.customize;
+    $('pkg-f-name-label')!.textContent = t.pkg.f_name;
+    ($('pkg-c-name') as HTMLInputElement).placeholder = t.pkg.f_namePh;
+    $('pkg-f-date-label')!.textContent = t.pkg.f_date;
+    $('pkg-f-extras-label')!.textContent = t.pkg.f_extras;
+    renderExtras(lang);
+
+    updateReserveLink();
   }
 
   function staggerFeatures(): void {
