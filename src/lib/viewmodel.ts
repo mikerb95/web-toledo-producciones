@@ -73,6 +73,10 @@ export function buildVM(content: SiteContent, lang: Lang): ViewModel {
     coverage: es ? content.coverage.es : content.coverage.en,
     coverageCity: es ? c.cityEs : c.cityEn,
     packages,
+    additionalServices: {
+      title: es ? content.additionalServices.titleEs : content.additionalServices.titleEn,
+      items: es ? content.additionalServices.itemsEs : content.additionalServices.itemsEn,
+    },
     events: t.ev.items.map((it) => ({ t: it.t, d: it.d })),
     links: {
       wa: waLink(c.whatsapp, reserveText(lang)),
