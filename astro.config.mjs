@@ -7,6 +7,8 @@ import vercel from '@astrojs/vercel';
 // reflejan para todos los visitantes sin necesidad de un rebuild.
 export default defineConfig({
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    imageService: true,
+  }),
   site: 'https://toledoproducciones.com',
 });
