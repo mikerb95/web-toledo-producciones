@@ -11,5 +11,5 @@ function cell(value: string | number): string {
 
 export function toCsv(header: string[], rows: (string | number)[][]): string {
   const lines = [header.map(cell).join(','), ...rows.map((r) => r.map(cell).join(','))];
-  return '﻿' + lines.join('\r\n') + '\r\n';
+  return '\uFEFF' + lines.join('\r\n') + '\r\n';
 }
