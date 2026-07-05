@@ -9,7 +9,7 @@ const navBars = [
 ];
 ---
 <nav style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(18px,4vw,48px);backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(8,8,10,.82),rgba(8,8,10,.35));border-bottom:1px solid rgba(226,168,46,.16)">
-  <a href="#top" style="display:flex;align-items:center;gap:11px">
+  <a href="#top" class="brand-link" style="display:flex;align-items:center;gap:11px">
     <Equalizer bars={navBars} width={3} height={20} gap={2.5} fill="#fff" radius={1} />
     <span class="gold-text" style="font-family:var(--font-display);font-weight:700;font-size:21px;letter-spacing:-.5px">Toledo</span>
     <span class="brand-sub" style="font-size:9.5px;letter-spacing:4px;font-weight:600;color:#9a948a;align-self:flex-end;padding-bottom:3px">PRODUCCIONES</span>
