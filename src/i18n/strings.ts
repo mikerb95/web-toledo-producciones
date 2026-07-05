@@ -43,11 +43,11 @@ const es: UIStrings = {
   },
   pkg: { kicker: 'Paquetes', title: 'Elige cómo quieres brillar', sub: 'Tres producciones pensadas para cada tipo de celebración. Toca un paquete para ver todo lo que incluye.', cta: 'Ver detalle', popular: 'Más elegido', includes: 'Incluye', reserve: 'Reservar este paquete', from: 'desde', back: 'Volver a paquetes', droneTag: 'Con cubrimiento en DRON', customize: 'Arma tu reserva', f_name: 'Tu nombre', f_namePh: 'Ej. Juan Pérez', f_date: 'Fecha deseada del evento', f_extras: 'Adicionales' },
   drone: {
-    kicker: 'Diferencial Élite',
+    kicker: 'Servicio adicional',
     title: 'Tu evento desde el cielo',
-    sub: 'Solo en el paquete Élite: una aeronave 4K captura un momento clave de tu celebración con tomas aéreas cinematográficas — la entrada, el brindis, el primer baile o la foto grupal vista como nunca antes.',
+    sub: 'Como adicional a cualquier paquete: una aeronave 4K captura un momento clave de tu celebración con tomas aéreas cinematográficas — la entrada, el brindis, el primer baile o la foto grupal vista como nunca antes.',
     s1: 'Altitud de vuelo', s2: 'Resolución', s3: 'Estabilización', s4: 'Momento capturado',
-    v1: '40 m', v2: '4K / 60fps', v3: 'Gimbal 3 ejes', v4: 'A tu elección', hud: 'DRON · EN VIVO', cta: 'Quiero el plan Élite',
+    v1: '40 m', v2: '4K / 60fps', v3: 'Gimbal 3 ejes', v4: 'A tu elección', hud: 'DRON · EN VIVO', cta: 'Quiero cubrimiento en dron',
   },
   ev: {
     kicker: 'Para cada ocasión',
