@@ -1,7 +1,16 @@
 // Maneja el formulario de login del admin: POST /api/login y recarga si ok.
 const form = document.getElementById('login-form') as HTMLFormElement | null;
 const pass = document.getElementById('login-pass') as HTMLInputElement | null;
+const passToggle = document.getElementById('login-pass-toggle');
 const err = document.getElementById('login-err');
+
+passToggle?.addEventListener('click', () => {
+  if (!pass) return;
+  const show = pass.type === 'password';
+  pass.type = show ? 'text' : 'password';
+  passToggle.textContent = show ? '🙈' : '👁';
+  passToggle.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
+});
 
 form?.addEventListener('submit', async (e) => {
   e.preventDefault();
