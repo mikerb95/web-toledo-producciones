@@ -21,3 +21,4 @@ npm-debug.log*
 
 # macos
 .DS_Store
+.vercel
