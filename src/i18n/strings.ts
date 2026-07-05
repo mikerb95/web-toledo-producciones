@@ -88,11 +88,11 @@ const en: UIStrings = {
   },
   pkg: { kicker: 'Packages', title: 'Choose how you want to shine', sub: 'Three productions designed for every kind of celebration. Tap a package to see everything it includes.', cta: 'See detail', popular: 'Most chosen', includes: 'Includes', reserve: 'Book this package', from: 'from', back: 'Back to packages', droneTag: 'With DRONE coverage', customize: 'Build your booking', f_name: 'Your name', f_namePh: 'E.g. John Smith', f_date: 'Desired event date', f_extras: 'Add-ons' },
   drone: {
-    kicker: 'Elite differentiator',
+    kicker: 'Additional service',
     title: 'Your event from the sky',
-    sub: 'Only in the Elite package: a 4K aircraft captures a key moment of your celebration with cinematic aerial shots — the entrance, the toast, the first dance or the group photo seen like never before.',
+    sub: 'As an add-on to any package: a 4K aircraft captures a key moment of your celebration with cinematic aerial shots — the entrance, the toast, the first dance or the group photo seen like never before.',
     s1: 'Flight altitude', s2: 'Resolution', s3: 'Stabilization', s4: 'Captured moment',
-    v1: '40 m', v2: '4K / 60fps', v3: '3-axis gimbal', v4: 'Your choice', hud: 'DRONE · LIVE', cta: 'I want the Elite plan',
+    v1: '40 m', v2: '4K / 60fps', v3: '3-axis gimbal', v4: 'Your choice', hud: 'DRONE · LIVE', cta: 'I want drone coverage',
   },
   ev: {
     kicker: 'For every occasion',
