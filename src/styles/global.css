@@ -90,6 +90,13 @@ input::placeholder, textarea::placeholder { color: #6a655c; }
   box-shadow: 0 14px 40px rgba(226,168,46,.4);
 }
 
+.back-link {
+  transition: color .2s;
+}
+.back-link:hover {
+  color: #E2C277;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
   [data-rev] { opacity: 1 !important; }
