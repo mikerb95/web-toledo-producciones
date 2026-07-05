@@ -80,10 +80,10 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
   <div style="position:relative;width:100%;max-width:920px;margin:auto;min-height:100%;display:flex;flex-direction:column">
     <div id="pkg-modal-card" class="checker-bg" style="position:relative;border:1px solid rgba(226,168,46,.25);border-radius:26px;margin:18px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)">
       <div id="pkg-glow"></div>
-      <button type="button" data-modal-close aria-label="Cerrar" style="position:absolute;top:20px;right:20px;z-index:5;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#ECE7DC;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      <button type="button" data-modal-close aria-label="Cerrar" class="pkg-modal-close" style="position:absolute;top:20px;right:20px;z-index:5;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#ECE7DC;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s">✕</button>
 
       <div style="position:relative;padding:clamp(30px,5vw,52px) clamp(24px,5vw,52px) clamp(28px,4vw,40px)">
-        <button type="button" data-modal-close style="background:none;border:none;color:#8b867c;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;padding:0;margin-bottom:24px;display:inline-flex;align-items:center;gap:7px"><span>←</span> <span id="pkg-back">{vm.t.pkg.back}</span></button>
+        <button type="button" data-modal-close class="pkg-modal-back" style="background:none;border:none;color:#8b867c;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;padding:0;margin-bottom:24px;display:inline-flex;align-items:center;gap:7px;transition:color .2s"><span>←</span> <span id="pkg-back">{vm.t.pkg.back}</span></button>
         <div id="pkg-chip" hidden></div>
         <h2 id="pkg-name" style="font-family:var(--font-display);font-weight:700;font-size:clamp(36px,7vw,64px);line-height:1;letter-spacing:-1.5px;margin:14px 0 12px;color:#F7F2E6"></h2>
         <p id="pkg-tag" style="font-size:clamp(15px,2vw,18.5px);line-height:1.55;color:#b6b0a4;max-width:560px;margin:0"></p>
@@ -133,7 +133,7 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
         </div>
 
         <div style="margin-top:24px;display:flex;flex-wrap:wrap;align-items:center;gap:16px">
-          <a id="pkg-reserve" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:16px;padding:16px 30px;border-radius:999px;box-shadow:0 12px 36px rgba(226,168,46,.32);text-decoration:none"><span id="pkg-reserve-label">{vm.t.pkg.reserve}</span> <span style="font-size:18px">→</span></a>
+          <a id="pkg-reserve" href="#" target="_blank" rel="noopener" class="gold-cta" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:16px;padding:16px 30px;border-radius:999px;box-shadow:0 12px 36px rgba(226,168,46,.32);text-decoration:none"><span id="pkg-reserve-label">{vm.t.pkg.reserve}</span> <span style="font-size:18px">→</span></a>
           <span id="pkg-badge" style="font-size:13.5px;color:#8b867c"></span>
         </div>
       </div>
@@ -143,9 +143,13 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
 
 <style>
   .pkg-card:hover { border-color: rgba(226,168,46,.55); transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+  .pkg-card:hover .pkg-cta { background: rgba(255,255,255,.04); }
   #pkg-modal:not([hidden]) { display: flex; }
   #pkg-form .c-input { width: 100%; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.14); border-radius: 11px; padding: 13px 15px; color: #ECE7DC; font-family: inherit; font-size: 14.5px; outline: none; color-scheme: dark; }
   #pkg-form .c-input:focus { border-color: #E2A82E; }
-  .pkg-extra-chip { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #cdc7bc; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 9px 15px; cursor: pointer; }
+  .pkg-modal-close:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.3); }
+  .pkg-modal-back:hover { color: #E2C277; }
+  .pkg-extra-chip { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #cdc7bc; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 9px 15px; cursor: pointer; transition: border-color .2s; }
+  .pkg-extra-chip:hover { border-color: rgba(226,168,46,.4); }
   .pkg-extra-chip input { width: 15px; height: 15px; accent-color: #E2A82E; }
 </style>
