@@ -81,6 +81,15 @@ input::placeholder, textarea::placeholder { color: #6a655c; }
   color: transparent;
 }
 
+.gold-cta {
+  transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s, filter .25s;
+}
+.gold-cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 14px 40px rgba(226,168,46,.4);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
   [data-rev] { opacity: 1 !important; }
