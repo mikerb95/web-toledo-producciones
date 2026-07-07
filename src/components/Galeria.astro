@@ -26,13 +26,13 @@ const photos = [
         <div style="border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07);background:#0a0a0c">
           <video src="/videos/galeria-1.mp4" autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
         </div>
-        <div style="border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07);background:radial-gradient(120% 120% at 30% 20%,rgba(244,199,82,.07),transparent 60%),linear-gradient(160deg,#13100b,#0a0a0c)">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#3a352c;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;text-align:center;padding:0 16px" data-i18n="t.gal.ph">{vm.t.gal.ph}</div>
+        <div style="border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07)">
+          <img src={photos[0]} alt="Momento de un evento producido por Toledo Producciones" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
         </div>
       </div>
-      {spans.slice(1).map((span) => (
-        <div style={`grid-row:span ${span};border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07);background:radial-gradient(120% 120% at 30% 20%,rgba(244,199,82,.07),transparent 60%),linear-gradient(160deg,#13100b,#0a0a0c)`}>
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#3a352c;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;text-align:center;padding:0 16px" data-i18n="t.gal.ph">{vm.t.gal.ph}</div>
+      {spans.slice(1).map((span, i) => (
+        <div style={`grid-row:span ${span};border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07)`}>
+          <img src={photos[i + 1]} alt="Momento de un evento producido por Toledo Producciones" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
         </div>
       ))}
     </div>
