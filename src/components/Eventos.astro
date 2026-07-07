@@ -9,17 +9,15 @@ const { vm } = Astro.props;
       <div data-i18n="t.ev.kicker" style="font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:14px">{vm.t.ev.kicker}</div>
       <h2 data-i18n="t.ev.title" style="font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.4vw,46px);line-height:1.04;letter-spacing:-1px;margin:0;color:#F4EFE3">{vm.t.ev.title}</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px">
+    <div data-rev="fade" style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);aspect-ratio:16/8">
+      <video src="/videos/galeria-1.mp4" autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+    </div>
+    <div data-rev="fade" style="display:flex;flex-wrap:wrap;gap:28px;margin-top:32px">
       {vm.events.map((item, i) => (
-        <div class="ev-card" data-rev="fade" style="position:relative;height:340px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1);transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s">
-          <div style="position:absolute;inset:0;background:radial-gradient(120% 100% at 50% 0%,rgba(244,199,82,.10),transparent 60%),linear-gradient(160deg,#15110b,#0a0a0c)"></div>
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#3a352c;font-size:12px;letter-spacing:2px;text-transform:uppercase">Foto del evento</div>
-          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,10,0) 30%,rgba(8,8,10,.55) 62%,rgba(8,8,10,.94) 100%);pointer-events:none"></div>
-          <div style="position:absolute;left:0;right:0;bottom:0;padding:22px;pointer-events:none">
-            <h3 data-i18n={`events.${i}.t`} style="font-family:var(--font-display);font-weight:700;font-size:23px;margin:0 0 7px;color:#F7F2E6">{item.t}</h3>
-            <p data-i18n={`events.${i}.d`} style="font-size:13.5px;line-height:1.5;color:#cdc7bc;margin:0">{item.d}</p>
-          </div>
-        </div>
+        <p style="flex:1 1 230px;margin:0;font-size:14.5px;line-height:1.55;color:#cdc7bc">
+          <strong data-i18n={`events.${i}.t`} style="font-family:var(--font-display);font-weight:700;font-size:17px;color:#F7F2E6;display:block;margin-bottom:6px">{item.t}</strong>
+          <span data-i18n={`events.${i}.d`}>{item.d}</span>
+        </p>
       ))}
     </div>
   </div>
