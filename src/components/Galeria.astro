@@ -4,6 +4,15 @@ interface Props { vm: ViewModel; }
 const { vm } = Astro.props;
 // 7 slots; 1 y 5 ocupan dos filas (igual que el prototipo).
 const spans = [2, 1, 1, 1, 2, 1, 1];
+const photos = [
+  '/images/galeria/dj-pista.jpeg',
+  '/images/galeria/cumpleanos-1.jpeg',
+  '/images/galeria/equipo-dj.jpeg',
+  '/images/galeria/cumpleanos-60.jpeg',
+  '/images/galeria/luces-laser.jpeg',
+  '/images/galeria/dj-terraza.jpeg',
+  '/images/galeria/montaje-terraza.jpeg',
+];
 ---
 <section id="galeria" style="position:relative;background:#08080a;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px)">
   <div style="max-width:1180px;margin:0 auto">
