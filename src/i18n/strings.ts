@@ -20,7 +20,11 @@ export interface UIStrings {
   ev: { kicker: string; title: string; more: string; items: EventItem[] };
   /** Páginas por tipo de evento (/bodas, /quince-anos...). */
   evp: { back: string; cta: string; verPaquete: string; momentos: string; recomendado: string; recomendadoSub: string; todos: string; servicios: string; fotos: string; faq: string };
-  gal: { kicker: string; title: string; sub: string; ph: string };
+  gal: { kicker: string; title: string; sub: string; ph: string; all: string };
+  /** Página /galeria (visor de fotos). */
+  galp: { sub: string; cerrar: string; anterior: string; siguiente: string; abrir: string };
+  /** Página /cubrimiento-dron. */
+  dronp: { faq: string; wa: string; cta: string };
   cov: { kicker: string; title: string; sub: string };
   contact: { kicker: string; title: string; sub: string; f_name: string; f_event: string; f_date: string; f_msg: string; send: string; or: string; wa: string; ig: string; mail: string; evOpts: string[] };
   footer: { tagline: string; contact: string; zone: string; slogan: string; rights: string; credit: string };
@@ -68,7 +72,9 @@ const es: UIStrings = {
     recomendadoSub: 'El punto de partida que mejor se ajusta a este tipo de evento. Lo puedes completar con adicionales.',
     todos: 'Ver todos los paquetes', servicios: 'Lo que más se pide', fotos: 'Producciones reales', faq: 'Preguntas frecuentes',
   },
-  gal: { kicker: 'Portafolio', title: 'Momentos que hemos creado', sub: 'Galería de eventos reales — próximamente con fotos y video de nuestras producciones.', ph: 'Foto / video del evento' },
+  gal: { kicker: 'Portafolio', title: 'Momentos que hemos creado', sub: 'Galería de eventos reales — próximamente con fotos y video de nuestras producciones.', ph: 'Foto / video del evento', all: 'Ver toda la galería' },
+  galp: { sub: 'Fotos de producciones reales en Bogotá: montajes, pistas llenas y shows de luces. Toca una foto para verla en grande.', cerrar: 'Cerrar', anterior: 'Foto anterior', siguiente: 'Foto siguiente', abrir: 'Ver foto en grande' },
+  dronp: { faq: 'Preguntas frecuentes', wa: 'Hola Toledo Producciones, quiero agregar cubrimiento en dron a mi evento ✨', cta: 'Cotizar el dron por WhatsApp' },
   cov: { kicker: 'Cobertura', title: 'Bogotá y municipios aledaños', sub: 'Llevamos la producción completa a la capital y a los municipios cercanos de Cundinamarca. ¿Tu evento es en otra zona? Escríbenos y lo coordinamos.' },
   contact: {
     kicker: 'Reserva tu fecha', title: 'Hagamos que brille', sub: 'Cuéntanos de tu evento y arma tu producción ideal. Te respondemos rápido por WhatsApp.',
@@ -120,7 +126,9 @@ const en: UIStrings = {
     recomendadoSub: 'The starting point that best fits this kind of event. You can complete it with add-ons.',
     todos: 'See all packages', servicios: 'Most requested', fotos: 'Real productions', faq: 'FAQ',
   },
-  gal: { kicker: 'Portfolio', title: 'Moments we have created', sub: 'Gallery of real events — coming soon with photos and video of our productions.', ph: 'Event photo / video' },
+  gal: { kicker: 'Portfolio', title: 'Moments we have created', sub: 'Gallery of real events — coming soon with photos and video of our productions.', ph: 'Event photo / video', all: 'See full gallery' },
+  galp: { sub: 'Photos of real productions in Bogotá: setups, packed dance floors and light shows. Tap a photo to see it full size.', cerrar: 'Close', anterior: 'Previous photo', siguiente: 'Next photo', abrir: 'View photo full size' },
+  dronp: { faq: 'FAQ', wa: 'Hi Toledo Producciones, I want to add drone coverage to my event ✨', cta: 'Get a drone quote on WhatsApp' },
   cov: { kicker: 'Coverage', title: 'Bogotá and surrounding towns', sub: 'We bring the full production to the capital and nearby towns of Cundinamarca. Is your event somewhere else? Write to us and we will arrange it.' },
   contact: {
     kicker: 'Book your date', title: 'Let us make it shine', sub: 'Tell us about your event and build your ideal production. We reply fast on WhatsApp.',

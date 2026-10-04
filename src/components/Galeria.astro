@@ -1,18 +1,11 @@
 ---
 import type { ViewModel } from '../lib/viewmodel';
+import { GALERIA } from '../data/galeria';
 interface Props { vm: ViewModel; }
 const { vm } = Astro.props;
 // 7 slots; 1 y 5 ocupan dos filas (igual que el prototipo).
 const spans = [2, 1, 1, 1, 2, 1, 1];
-const photos = [
-  '/images/galeria/dj-pista.jpeg',
-  '/images/galeria/cumpleanos-1.jpeg',
-  '/images/galeria/equipo-dj.jpeg',
-  '/images/galeria/cumpleanos-60.jpeg',
-  '/images/galeria/luces-laser.jpeg',
-  '/images/galeria/dj-terraza.jpeg',
-  '/images/galeria/montaje-terraza.jpeg',
-];
+const photos = GALERIA.slice(0, spans.length);
 ---
 <section id="galeria" style="position:relative;background:#08080a;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px)">
   <div style="max-width:1180px;margin:0 auto">
@@ -24,10 +17,17 @@ const photos = [
     <div data-rev="fade" data-galeria style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));grid-auto-rows:190px;gap:14px">
       {spans.map((span, i) => (
         <div class="gal-foto" style={`grid-row:span ${span};border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07)`}>
-          <img src={photos[i]} alt="Momento de un evento producido por Toledo Producciones" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+          <img src={photos[i].src} alt={photos[i].alt} loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
         </div>
       ))}
       <div class="gal-barrido" data-barrido aria-hidden="true"></div>
+    </div>
+    <div data-rev="up" style="margin-top:28px;display:flex;justify-content:center">
+      <a href="/galeria" class="gal-todas">
+        <span data-i18n="t.gal.all">{vm.t.gal.all}</span>
+        <span class="gal-todas-n">{GALERIA.length}</span>
+        <span aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 </section>
@@ -35,6 +35,13 @@ const photos = [
 <style>
   .gal-foto img { transition: transform .8s cubic-bezier(.2,.7,.2,1); }
   .gal-foto:hover img { transform: scale(1.05); }
+  .gal-todas {
+    display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border-radius: 999px;
+    border: 1px solid rgba(226,168,46,.35); color: #E2C277; font-weight: 700; font-size: 14.5px;
+    transition: background-color .2s, border-color .2s, gap .25s;
+  }
+  .gal-todas:hover { background: rgba(226,168,46,.08); border-color: rgba(226,168,46,.6); gap: 13px; }
+  .gal-todas-n { font-size: 12px; color: #1a1206; background: #E2C277; border-radius: 999px; padding: 2px 8px; }
   /* Haz que cruza la rejilla al entrar (galeria.ts). Sin JS no se ve. */
   .gal-barrido {
     position: absolute; top: -8%; bottom: -8%; left: 0; width: 34%; pointer-events: none; opacity: 0;
