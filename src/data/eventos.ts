@@ -37,14 +37,14 @@ export const EVENTOS: EventoPagina[] = [
   {
     slug: 'bodas',
     paquete: 'estelar',
-    servicios: [0, 2, 5, 6],
+    servicios: [0, 2, 4, 3],
     fotos: ['/images/galeria/montaje-terraza.jpeg', '/images/galeria/dj-terraza.jpeg'],
     ambiente: 'radial-gradient(80% 90% at 50% 0%,rgba(244,199,82,.55),transparent 70%)',
     es: {
       metaTitle: 'DJ, sonido y luces para bodas en Bogotá | Toledo Producciones',
       metaDesc: 'DJ profesional, sonido, iluminación, show láser y cubrimiento 4K para bodas en Bogotá y municipios aledaños. Cotiza tu fecha por WhatsApp.',
       h1: 'DJ, sonido y luces para bodas en Bogotá',
-      sub: 'Producimos la fiesta de tu boda de principio a fin: música para cada momento, luz cálida que acompaña la noche y video 4K para revivirlo todo.',
+      sub: 'Producimos la fiesta de tu boda de principio a fin: música para cada momento, luz cálida que acompaña la noche y un show de luces para la fiesta.',
       momentos: [
         { t: 'La entrada', d: 'Música y luz listas para el momento en que entran al salón.' },
         { t: 'El primer baile', d: 'Luz cálida sobre la pista y la canción que eligieron, en el momento justo.' },
@@ -58,7 +58,7 @@ export const EVENTOS: EventoPagina[] = [
       metaTitle: 'Wedding DJ, sound and lighting in Bogotá | Toledo Producciones',
       metaDesc: 'Professional DJ, sound, lighting, laser show and 4K coverage for weddings in Bogotá and nearby towns. Check your date on WhatsApp.',
       h1: 'DJ, sound and lighting for weddings in Bogotá',
-      sub: 'We produce your wedding party from start to finish: music for every moment, warm light all night long and 4K video to relive it all.',
+      sub: 'We produce your wedding party from start to finish: music for every moment, warm light all night long and a light show for the party.',
       momentos: [
         { t: 'The entrance', d: 'Music and light ready for the moment you walk into the room.' },
         { t: 'The first dance', d: 'Warm light on the dance floor and the song you chose, right on cue.' },
@@ -107,7 +107,7 @@ export const EVENTOS: EventoPagina[] = [
   {
     slug: 'cumpleanos',
     paquete: 'esencial',
-    servicios: [0, 1, 2, 5],
+    servicios: [0, 1, 2],
     fotos: ['/images/galeria/cumpleanos-1.jpeg', '/images/galeria/cumpleanos-60.jpeg'],
     ambiente: 'radial-gradient(50% 80% at 15% 0%,rgba(244,199,82,.5),transparent 70%),radial-gradient(50% 80% at 50% 0%,rgba(226,120,210,.45),transparent 70%),radial-gradient(50% 80% at 85% 0%,rgba(120,180,255,.5),transparent 70%)',
     es: {
