@@ -1,0 +1,65 @@
+---
+// Cubrimiento en dron: la sección de la portada como página propia, con
+// preguntas frecuentes y el botón directo a WhatsApp.
+import Pagina from '../layouts/Pagina.astro';
+import Dron from '../components/Dron.astro';
+import Preguntas from '../components/Preguntas.astro';
+import Contacto from '../components/Contacto.astro';
+import { getContent } from '../lib/content';
+import { buildVM, type ViewModel } from '../lib/viewmodel';
+import { waLink } from '../lib/wa';
+import { preguntasDron } from '../data/dron';
+import type { Lang } from '../i18n/strings';
+
+const content = await getContent();
+const vmEs = buildVM(content, 'es');
+const vmEn = buildVM(content, 'en');
+const datos = (vm: ViewModel, lang: Lang) => ({
+  wa: waLink(vm.contact.whatsapp, vm.t.dronp.wa),
+  faq: preguntasDron(lang, vm.packages.map((p) => p.name)),
+});
+const pEs = datos(vmEs, 'es');
+const pEn = datos(vmEn, 'en');
+const store = JSON.stringify({ es: { ...vmEs, pagina: pEs }, en: { ...vmEn, pagina: pEn } });
+const vm = vmEs;
+const t = vm.t;
+
+const url = new URL('/cubrimiento-dron', Astro.site).href;
+const title = 'Cubrimiento en dron para eventos en Bogotá | Toledo Producciones';
+const description = 'Tomas aéreas en 4K a 60 fps con gimbal de 3 ejes para bodas, 15 años y eventos en Bogotá. Se agrega a cualquier paquete. Cotiza por WhatsApp.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      name: 'Cubrimiento en dron para eventos',
+      description,
+      serviceType: 'Video aéreo para eventos',
+      url,
+      areaServed: content.coverage.es.map((city) => ({ '@type': 'City', name: city })),
+      provider: { '@type': 'EventPlanningService', name: 'Toledo Producciones', url: 'https://toledoproducciones.org' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: pEs.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ],
+};
+---
+
+<Pagina vm={vm} store={store} title={title} description={description} jsonLd={jsonLd}>
+  <div style="padding-top:50px;background:#08080a">
+    <Dron vm={vm} principal ctaHref={pEs.wa} ctaI18nHref="pagina.wa" />
+  </div>
+  <div class="checker-bg" style="border-top:1px solid rgba(226,168,46,.1)">
+    <Preguntas titulo={t.dronp.faq} tituloI18n="t.dronp.faq" items={pEs.faq} i18n="pagina.faq" />
+  </div>
+  <Contacto vm={vm} />
+
+  <script>
+    import '../scripts/contact-form';
+    import { dron } from '../scripts/motion/dron';
+    import { reducido } from '../scripts/motion/comun';
+    if (!reducido()) dron();
+  </script>
+</Pagina>
