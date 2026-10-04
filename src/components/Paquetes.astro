@@ -1,20 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 import type { ViewModel } from '../lib/viewmodel';
-import esencial1 from '../assets/packages/esencial-1.jpeg';
-import esencial2 from '../assets/packages/esencial-2.jpeg';
-import estelar1 from '../assets/packages/estelar-1.jpeg';
-import estelar2 from '../assets/packages/estelar-2.jpeg';
-import elite1 from '../assets/packages/elite-1.jpeg';
-import elite2 from '../assets/packages/elite-2.jpeg';
+import { FOTOS_PAQUETE as PHOTOS } from '../assets/packages/fotos';
 interface Props { vm: ViewModel; }
 const { vm } = Astro.props;
-const a = (accent: string) => accent;
-const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
-  esencial: [esencial1, esencial2],
-  estelar: [estelar1, estelar2],
-  elite: [elite1, elite2],
-};
 ---
 <section id="paquetes" class="checker-bg" style="position:relative;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px);border-top:1px solid rgba(226,168,46,.1);border-bottom:1px solid rgba(226,168,46,.1)">
   <div style="max-width:1180px;margin:0 auto">
@@ -25,9 +14,9 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
     </div>
     <div data-luz data-bucle style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;align-items:stretch">
       {vm.packages.map((p, i) => (
-        <div class:list={["pkg-card", { "pkg-popular": p.popular }]} data-rev="fade" data-package data-index={i} role="button" tabindex="0" style={`transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:0 0 30px;cursor:pointer;overflow:hidden`}>
+        <a href={`/paquetes/${p.id}`} class:list={["pkg-card", { "pkg-popular": p.popular }]} data-rev="fade" style={`transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:0 0 30px;overflow:hidden;color:inherit`}>
           <div style="position:relative;width:100%;aspect-ratio:16/10;overflow:hidden">
-            <Image src={PHOTOS[p.id][0]} alt={p.name} width={580} height={363} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+            <Image src={PHOTOS[p.id][0]} alt={p.name} width={580} height={363} style={`position:absolute;inset:0;width:100%;height:100%;object-fit:cover;view-transition-name:pkg-foto-${p.id}`} />
             <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,9,7,.85))"></div>
             {p.popular && <div class="pkg-seguidor" aria-hidden="true"></div>}
           </div>
@@ -58,9 +47,9 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
               <div data-i18n={`packages.${i}.extra`} style="font-size:13px;color:#7d786f;font-weight:600;padding-left:23px">{p.extra}</div>
             )}
           </div>
-          <button type="button" class="pkg-cta" style={`margin-top:22px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;border:1px solid ${p.accent}55;color:${p.accent};font-weight:700;font-size:14.5px;font-family:inherit;padding:13px 18px;border-radius:12px;cursor:pointer;transition:background .2s,border-color .2s`}><span data-i18n="t.pkg.cta">{vm.t.pkg.cta}</span> <span style="font-size:17px">→</span></button>
+          <span class="pkg-cta" style={`margin-top:22px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;border:1px solid ${p.accent}55;color:${p.accent};font-weight:700;font-size:14.5px;padding:13px 18px;border-radius:12px;transition:background .2s,border-color .2s`}><span data-i18n="t.pkg.cta">{vm.t.pkg.cta}</span> <span aria-hidden="true" style="font-size:17px">→</span></span>
           </div>
-        </div>
+        </a>
       ))}
     </div>
     <div data-rev="up" style="margin-top:44px;border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:28px 30px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.008))">
@@ -75,72 +64,6 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
     </div>
   </div>
 </section>
-
-<!-- MODAL DETALLE (oculto; poblado por package-modal.ts) -->
-<div id="pkg-modal" hidden style="position:fixed;inset:0;z-index:90;justify-content:center;background:rgba(6,6,8,.72);backdrop-filter:blur(8px);overflow-y:auto">
-  <div style="position:relative;width:100%;max-width:920px;margin:auto;min-height:100%;display:flex;flex-direction:column">
-    <div id="pkg-modal-card" class="checker-bg" style="position:relative;border:1px solid rgba(226,168,46,.25);border-radius:26px;margin:18px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)">
-      <div id="pkg-glow"></div>
-      <button type="button" data-modal-close aria-label="Cerrar" class="pkg-modal-close" style="position:absolute;top:20px;right:20px;z-index:5;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#ECE7DC;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s">✕</button>
-
-      <div style="position:relative;padding:clamp(30px,5vw,52px) clamp(24px,5vw,52px) clamp(28px,4vw,40px)">
-        <button type="button" data-modal-close class="pkg-modal-back" style="background:none;border:none;color:#8b867c;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;padding:0;margin-bottom:24px;display:inline-flex;align-items:center;gap:7px;transition:color .2s"><span>←</span> <span id="pkg-back">{vm.t.pkg.back}</span></button>
-        <div id="pkg-chip" hidden></div>
-        <h2 id="pkg-name" style="font-family:var(--font-display);font-weight:700;font-size:clamp(36px,7vw,64px);line-height:1;letter-spacing:-1.5px;margin:14px 0 12px;color:#F7F2E6"></h2>
-        <p id="pkg-tag" style="font-size:clamp(15px,2vw,18.5px);line-height:1.55;color:#b6b0a4;max-width:560px;margin:0"></p>
-        <div style="display:flex;align-items:baseline;gap:10px;margin-top:26px">
-          <div id="pkg-price" style="font-family:var(--font-display);font-weight:700;font-size:clamp(38px,6vw,58px);line-height:1"></div>
-          <div id="pkg-price-note" style="font-size:13px;color:#7d786f;font-weight:500"></div>
-        </div>
-      </div>
-
-      <div style="position:relative;padding:0 clamp(24px,5vw,52px) clamp(10px,3vw,20px);display:grid;grid-template-columns:1fr 1fr;gap:14px">
-        {Object.entries(PHOTOS).map(([id, [img1, img2]]) => (
-          <>
-            <div data-pkg-photo={id} hidden style="grid-column:1;position:relative;aspect-ratio:4/3;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
-              <Image src={img1} alt="" width={460} height={345} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
-            </div>
-            <div data-pkg-photo={id} hidden style="grid-column:2;position:relative;aspect-ratio:4/3;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
-              <Image src={img2} alt="" width={460} height={345} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
-            </div>
-          </>
-        ))}
-      </div>
-
-      <div style="position:relative;padding:0 clamp(24px,5vw,52px) clamp(34px,5vw,52px)">
-        <div id="pkg-includes" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:20px">{vm.t.pkg.includes}</div>
-        <div id="pkg-features" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 26px;margin-bottom:18px"></div>
-        <div id="pkg-drone" hidden style="margin-top:14px;position:relative;overflow:hidden;border:1px solid rgba(244,199,82,.3);border-radius:18px;background:linear-gradient(120deg,rgba(244,199,82,.08),rgba(255,255,255,.02));padding:22px 24px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <span style="width:9px;height:9px;border-radius:50%;background:#ff5a4d;box-shadow:0 0 10px #ff5a4d;animation:pulseDot 1.4s ease-in-out infinite"></span>
-            <span id="pkg-drone-hud" style="font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:1.5px;color:#F4C752"></span>
-          </div>
-          <div id="pkg-drone-sub" style="font-size:15px;line-height:1.55;color:#dcd6cb"></div>
-        </div>
-        <div id="pkg-form" style="margin-top:34px;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 26px;background:rgba(255,255,255,.03)">
-          <div id="pkg-customize" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:18px">{vm.t.pkg.customize}</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px">
-            <label style="display:block">
-              <span id="pkg-f-name-label" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.pkg.f_name}</span>
-              <input id="pkg-c-name" type="text" placeholder={vm.t.pkg.f_namePh} class="c-input" />
-            </label>
-            <label style="display:block">
-              <span id="pkg-f-date-label" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.pkg.f_date}</span>
-              <input id="pkg-c-date" type="date" class="c-input" />
-            </label>
-          </div>
-          <div id="pkg-f-extras-label" style="font-size:12px;font-weight:600;color:#a8a293;margin-bottom:10px">{vm.t.pkg.f_extras}</div>
-          <div id="pkg-extras" style="display:flex;flex-wrap:wrap;gap:10px"></div>
-        </div>
-
-        <div style="margin-top:24px;display:flex;flex-wrap:wrap;align-items:center;gap:16px">
-          <a id="pkg-reserve" href="#" target="_blank" rel="noopener" class="gold-cta" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:16px;padding:16px 30px;border-radius:999px;box-shadow:0 12px 36px rgba(226,168,46,.32);text-decoration:none"><span id="pkg-reserve-label">{vm.t.pkg.reserve}</span> <span style="font-size:18px">→</span></a>
-          <span id="pkg-badge" style="font-size:13.5px;color:#8b867c"></span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <style>
   /* El seguidor (follow spot) descansa sobre el paquete más elegido: un cono
@@ -157,12 +80,5 @@ const PHOTOS: Record<string, [ImageMetadata, ImageMetadata]> = {
   @keyframes pkg-respira { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
   .pkg-card:hover { border-color: rgba(226,168,46,.55); transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
   .pkg-card:hover .pkg-cta { background: rgba(255,255,255,.04); }
-  #pkg-modal:not([hidden]) { display: flex; }
-  #pkg-form .c-input { width: 100%; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.14); border-radius: 11px; padding: 13px 15px; color: #ECE7DC; font-family: inherit; font-size: 14.5px; outline: none; color-scheme: dark; }
-  #pkg-form .c-input:focus { border-color: #E2A82E; }
-  .pkg-modal-close:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.3); }
-  .pkg-modal-back:hover { color: #E2C277; }
-  .pkg-extra-chip { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #cdc7bc; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 9px 15px; cursor: pointer; transition: border-color .2s; }
-  .pkg-extra-chip:hover { border-color: rgba(226,168,46,.4); }
-  .pkg-extra-chip input { width: 15px; height: 15px; accent-color: #E2A82E; }
+  .pkg-card:focus-visible { outline: 2px solid #E2A82E; outline-offset: 3px; }
 </style>

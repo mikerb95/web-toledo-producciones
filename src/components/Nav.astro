@@ -8,19 +8,19 @@ const navBars = [
   { h: 19, dur: 1.2, delay: -0.7 }, { h: 9, dur: 1, delay: -0.2 },
 ];
 ---
-<nav style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(18px,4vw,48px);backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(8,8,10,.82),rgba(8,8,10,.35));border-bottom:1px solid rgba(226,168,46,.16)">
-  <a href="#top" class="brand-link" style="display:flex;align-items:center;gap:11px">
+<nav style="view-transition-name:nav;position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(18px,4vw,48px);backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(8,8,10,.82),rgba(8,8,10,.35));border-bottom:1px solid rgba(226,168,46,.16)">
+  <a href="/#top" class="brand-link" style="display:flex;align-items:center;gap:11px">
     <Equalizer bars={navBars} width={3} height={20} gap={2.5} fill="#fff" radius={1} />
     <span class="gold-text" style="font-family:var(--font-display);font-weight:700;font-size:21px;letter-spacing:-.5px">Toledo</span>
     <span class="brand-sub" style="font-size:9.5px;letter-spacing:4px;font-weight:600;color:#9a948a;align-self:flex-end;padding-bottom:3px">PRODUCCIONES</span>
   </a>
   <div style="display:flex;align-items:center;gap:clamp(10px,2vw,26px)">
     <div class="nav-links" style="display:flex;gap:clamp(10px,1.8vw,24px);font-size:14px;font-weight:500;color:#cdc7bc">
-      <a href="#servicios" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.servicios">{vm.t.nav.servicios}</a>
-      <a href="#paquetes" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.paquetes">{vm.t.nav.paquetes}</a>
-      <a href="#dron" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.dron">{vm.t.nav.dron}</a>
-      <a href="#galeria" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.galeria">{vm.t.nav.galeria}</a>
-      <a href="#contacto" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.contacto">{vm.t.nav.contacto}</a>
+      <a href="/#servicios" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.servicios">{vm.t.nav.servicios}</a>
+      <a href="/paquetes" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.paquetes">{vm.t.nav.paquetes}</a>
+      <a href="/#dron" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.dron">{vm.t.nav.dron}</a>
+      <a href="/#galeria" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.galeria">{vm.t.nav.galeria}</a>
+      <a href="/#contacto" style="opacity:.85;transition:opacity .2s" data-i18n="t.nav.contacto">{vm.t.nav.contacto}</a>
     </div>
     <div style="display:flex;align-items:center;gap:1px;border:1px solid rgba(226,168,46,.3);border-radius:999px;padding:3px;font-size:12px;font-weight:700">
       <button type="button" data-lang-btn="es" class="lang-btn">ES</button>

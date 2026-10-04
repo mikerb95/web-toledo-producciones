@@ -1,0 +1,42 @@
+---
+// Marco de las páginas internas (todo lo que no es la portada): nav, footer,
+// badge de WhatsApp, store bilingüe para el toggle de idioma y el motion
+// común (entradas, bucles, luz del cursor). La portada no lo usa porque monta
+// su propio motion (hero, radar, ambientes).
+import Base from './Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppBadge from '../components/WhatsAppBadge.astro';
+import type { ViewModel } from '../lib/viewmodel';
+
+interface Props {
+  vm: ViewModel;
+  /** View models ES + EN serializados para el toggle de idioma. */
+  store: string;
+  title: string;
+  description: string;
+  image?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { vm, store, title, description, image, jsonLd } = Astro.props;
+---
+
+<Base title={title} description={description} image={image}>
+  <div style="position:relative;min-height:100vh;background:#08080a;overflow:hidden">
+    <Nav vm={vm} />
+    <main>
+      <slot />
+    </main>
+    <Footer vm={vm} />
+    <WhatsAppBadge vm={vm} />
+  </div>
+
+  <script id="toledo-data" type="application/json" set:html={store} is:inline></script>
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline></script>}
+
+  <script>
+    import '../scripts/lang-toggle';
+    import '../scripts/motion/pagina';
+  </script>
+</Base>

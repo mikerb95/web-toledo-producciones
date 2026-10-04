@@ -5,16 +5,19 @@ interface Props {
   title?: string;
   description?: string;
   noindex?: boolean;
+  /** Ruta o URL de la imagen para OG/Twitter. Por defecto, /og-image.jpg. */
+  image?: string;
 }
 
 const {
   title = 'Toledo Producciones · Producción de eventos en Bogotá',
   description = 'Producción de eventos en Bogotá: DJ, sonido, iluminación, show láser, luces robóticas, cubrimiento 4K y cubrimiento en dron. Hacemos que tu evento brille.',
   noindex = false,
+  image = '/og-image.jpg',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL('/og-image.jpg', Astro.site);
+const ogImageURL = new URL(image, Astro.site);
 ---
 
 <!DOCTYPE html>

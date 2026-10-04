@@ -15,7 +15,7 @@ export interface UIStrings {
   nav: { servicios: string; paquetes: string; dron: string; galeria: string; contacto: string; reservar: string; admin: string };
   hero: { cta1: string; cta2: string; tag1: string; tag2: string; tag3: string; tag4: string; scroll: string };
   serv: { kicker: string; title: string; sub: string; items: ServiceItem[] };
-  pkg: { kicker: string; title: string; sub: string; cta: string; popular: string; includes: string; reserve: string; from: string; back: string; droneTag: string; customize: string; f_name: string; f_namePh: string; f_date: string; f_extras: string };
+  pkg: { kicker: string; title: string; sub: string; cta: string; popular: string; includes: string; reserve: string; from: string; back: string; droneTag: string; customize: string; f_name: string; f_namePh: string; f_date: string; f_extras: string; others: string };
   drone: { kicker: string; title: string; sub: string; s1: string; s2: string; s3: string; s4: string; v1: string; v2: string; v3: string; v4: string; hud: string; cta: string };
   ev: { kicker: string; title: string; items: EventItem[] };
   gal: { kicker: string; title: string; sub: string; ph: string };
@@ -41,7 +41,7 @@ const es: UIStrings = {
       { t: 'Cubrimiento en dron', d: 'Tomas aéreas cinematográficas que cuentan tu evento desde otra perspectiva.' },
     ],
   },
-  pkg: { kicker: 'Paquetes', title: 'Elige cómo quieres brillar', sub: 'Tres producciones pensadas para cada tipo de celebración. Toca un paquete para ver todo lo que incluye.', cta: 'Ver detalle', popular: 'Más elegido', includes: 'Incluye', reserve: 'Reservar este paquete', from: 'desde', back: 'Volver a paquetes', droneTag: 'Con cubrimiento en DRON', customize: 'Arma tu reserva', f_name: 'Tu nombre', f_namePh: 'Ej. Juan Pérez', f_date: 'Fecha deseada del evento', f_extras: 'Adicionales' },
+  pkg: { kicker: 'Paquetes', title: 'Elige cómo quieres brillar', sub: 'Tres producciones pensadas para cada tipo de celebración. Toca un paquete para ver todo lo que incluye.', cta: 'Ver detalle', popular: 'Más elegido', includes: 'Incluye', reserve: 'Reservar este paquete', from: 'desde', back: 'Volver a paquetes', droneTag: 'Con cubrimiento en DRON', customize: 'Arma tu reserva', f_name: 'Tu nombre', f_namePh: 'Ej. Juan Pérez', f_date: 'Fecha deseada del evento', f_extras: 'Adicionales', others: 'Otros paquetes' },
   drone: {
     kicker: 'Servicio adicional',
     title: 'Tu evento desde el cielo',
@@ -86,7 +86,7 @@ const en: UIStrings = {
       { t: 'Drone coverage', d: 'Cinematic aerial shots that tell your event from another perspective.' },
     ],
   },
-  pkg: { kicker: 'Packages', title: 'Choose how you want to shine', sub: 'Three productions designed for every kind of celebration. Tap a package to see everything it includes.', cta: 'See detail', popular: 'Most chosen', includes: 'Includes', reserve: 'Book this package', from: 'from', back: 'Back to packages', droneTag: 'With DRONE coverage', customize: 'Build your booking', f_name: 'Your name', f_namePh: 'E.g. John Smith', f_date: 'Desired event date', f_extras: 'Add-ons' },
+  pkg: { kicker: 'Packages', title: 'Choose how you want to shine', sub: 'Three productions designed for every kind of celebration. Tap a package to see everything it includes.', cta: 'See detail', popular: 'Most chosen', includes: 'Includes', reserve: 'Book this package', from: 'from', back: 'Back to packages', droneTag: 'With DRONE coverage', customize: 'Build your booking', f_name: 'Your name', f_namePh: 'E.g. John Smith', f_date: 'Desired event date', f_extras: 'Add-ons', others: 'Other packages' },
   drone: {
     kicker: 'Additional service',
     title: 'Your event from the sky',
