@@ -1,7 +1,11 @@
 ---
 import type { ViewModel } from '../lib/viewmodel';
-interface Props { vm: ViewModel; }
-const { vm } = Astro.props;
+interface Props {
+  vm: ViewModel;
+  /** Índice de t.contact.evOpts que viene elegido (en las páginas de evento). */
+  evento?: number;
+}
+const { vm, evento } = Astro.props;
 const c = vm.contact;
 ---
 <section id="contacto" style="position:relative;background:#08080a;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px);overflow:hidden">
@@ -38,7 +42,7 @@ const c = vm.contact;
             <span data-i18n="t.contact.f_event" style="display:block;font-size:12px;font-weight:600;color:#a8a293;margin-bottom:7px">{vm.t.contact.f_event}</span>
             <select id="c-event" class="c-input">
               {vm.t.contact.evOpts.map((o, i) => (
-                <option data-i18n={`t.contact.evOpts.${i}`} style="background:#0c0c0f">{o}</option>
+                <option data-i18n={`t.contact.evOpts.${i}`} selected={i === evento} style="background:#0c0c0f">{o}</option>
               ))}
             </select>
           </label>

@@ -17,7 +17,9 @@ export interface UIStrings {
   serv: { kicker: string; title: string; sub: string; items: ServiceItem[] };
   pkg: { kicker: string; title: string; sub: string; cta: string; popular: string; includes: string; reserve: string; from: string; back: string; droneTag: string; customize: string; f_name: string; f_namePh: string; f_date: string; f_extras: string; others: string };
   drone: { kicker: string; title: string; sub: string; s1: string; s2: string; s3: string; s4: string; v1: string; v2: string; v3: string; v4: string; hud: string; cta: string };
-  ev: { kicker: string; title: string; items: EventItem[] };
+  ev: { kicker: string; title: string; more: string; items: EventItem[] };
+  /** Páginas por tipo de evento (/bodas, /quince-anos...). */
+  evp: { back: string; cta: string; verPaquete: string; momentos: string; recomendado: string; recomendadoSub: string; todos: string; servicios: string; fotos: string; faq: string };
   gal: { kicker: string; title: string; sub: string; ph: string };
   cov: { kicker: string; title: string; sub: string };
   contact: { kicker: string; title: string; sub: string; f_name: string; f_event: string; f_date: string; f_msg: string; send: string; or: string; wa: string; ig: string; mail: string; evOpts: string[] };
@@ -52,12 +54,19 @@ const es: UIStrings = {
   ev: {
     kicker: 'Para cada ocasión',
     title: 'Celebraciones que producimos',
+    more: 'Ver más',
     items: [
       { t: 'Bodas', d: 'Una atmósfera de cuento: luz cálida, primer baile inolvidable y registro 4K.' },
       { t: '15 Años', d: 'El show que tu quinceañera merece — láser, robóticas y energía de fiesta.' },
       { t: 'Cumpleaños', d: 'Desde lo íntimo hasta la gran fiesta, con la música y las luces perfectas.' },
       { t: 'Eventos empresariales', d: 'Producción impecable y profesional para lanzamientos, galas y fin de año.' },
     ],
+  },
+  evp: {
+    back: 'Todas las celebraciones', cta: 'Cotizar por WhatsApp', verPaquete: 'Ver paquete recomendado',
+    momentos: 'Los momentos que cuidamos', recomendado: 'Paquete recomendado',
+    recomendadoSub: 'El punto de partida que mejor se ajusta a este tipo de evento. Lo puedes completar con adicionales.',
+    todos: 'Ver todos los paquetes', servicios: 'Lo que más se pide', fotos: 'Producciones reales', faq: 'Preguntas frecuentes',
   },
   gal: { kicker: 'Portafolio', title: 'Momentos que hemos creado', sub: 'Galería de eventos reales — próximamente con fotos y video de nuestras producciones.', ph: 'Foto / video del evento' },
   cov: { kicker: 'Cobertura', title: 'Bogotá y municipios aledaños', sub: 'Llevamos la producción completa a la capital y a los municipios cercanos de Cundinamarca. ¿Tu evento es en otra zona? Escríbenos y lo coordinamos.' },
@@ -97,12 +106,19 @@ const en: UIStrings = {
   ev: {
     kicker: 'For every occasion',
     title: 'Celebrations we produce',
+    more: 'See more',
     items: [
       { t: 'Weddings', d: 'A fairytale atmosphere: warm light, unforgettable first dance and 4K coverage.' },
       { t: 'Quinceañeras', d: 'The show your quinceañera deserves — laser, robotics and party energy.' },
       { t: 'Birthdays', d: 'From intimate to the big party, with the perfect music and lights.' },
       { t: 'Corporate events', d: 'Flawless, professional production for launches, galas and year-end parties.' },
     ],
+  },
+  evp: {
+    back: 'All celebrations', cta: 'Get a quote on WhatsApp', verPaquete: 'See recommended package',
+    momentos: 'The moments we take care of', recomendado: 'Recommended package',
+    recomendadoSub: 'The starting point that best fits this kind of event. You can complete it with add-ons.',
+    todos: 'See all packages', servicios: 'Most requested', fotos: 'Real productions', faq: 'FAQ',
   },
   gal: { kicker: 'Portfolio', title: 'Moments we have created', sub: 'Gallery of real events — coming soon with photos and video of our productions.', ph: 'Event photo / video' },
   cov: { kicker: 'Coverage', title: 'Bogotá and surrounding towns', sub: 'We bring the full production to the capital and nearby towns of Cundinamarca. Is your event somewhere else? Write to us and we will arrange it.' },
