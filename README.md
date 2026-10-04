@@ -23,7 +23,9 @@ src/
   i18n/strings.ts      Textos de UI bilingües (no editables)
   lib/                 db, content (CRUD), auth, wa, viewmodel
   components/          Secciones del sitio (.astro)
-  scripts/             Islands JS: lang-toggle, package-modal, contact-form, reveal, login, admin
+  scripts/             Islands JS: lang-toggle, package-modal, contact-form, login, admin
+  scripts/motion/      Motion de la portada (GSAP): rig del hero, entradas, radar, ambientes
+  lib/motion/          Lógica pura del motion (tempo, geometría del rig, mapa) con tests
   pages/
     index.astro        Sitio público (SSR desde BD)
     admin/index.astro  Panel admin (login + 3 pestañas)
