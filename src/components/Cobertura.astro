@@ -1,7 +1,14 @@
 ---
 import type { ViewModel } from '../lib/viewmodel';
+import { ubicar, RADIO_KM } from '../lib/motion/cobertura';
 interface Props { vm: ViewModel; }
 const { vm } = Astro.props;
+// Puntos del radar en su lugar real respecto a Bogotá (norte arriba). Los
+// municipios sin coordenadas conocidas quedan solo como chip.
+const puntos = vm.coverage
+  .map((nombre) => ({ nombre, u: ubicar(nombre) }))
+  .filter((p) => p.u && p.u.km > 0.5)
+  .map(({ nombre, u }) => ({ nombre, x: 50 + u!.x * 50, y: 50 + u!.y * 50, rumbo: u!.rumbo, km: u!.km }));
 ---
 <section id="cobertura" class="checker-bg" style="position:relative;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px);border-top:1px solid rgba(226,168,46,.1);overflow:hidden">
   <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(36px,6vw,64px);align-items:center">
@@ -9,25 +16,67 @@ const { vm } = Astro.props;
       <div data-i18n="t.cov.kicker" style="font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:14px">{vm.t.cov.kicker}</div>
       <h2 data-i18n="t.cov.title" style="font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.4vw,46px);line-height:1.04;letter-spacing:-1px;margin:0 0 16px;color:#F4EFE3">{vm.t.cov.title}</h2>
       <p data-i18n="t.cov.sub" style="font-size:16px;line-height:1.65;color:#a09a8f;margin:0 0 26px;max-width:480px">{vm.t.cov.sub}</p>
-      <div id="coverage-chips" style="display:flex;flex-wrap:wrap;gap:9px;max-width:520px">
+      <div id="coverage-chips" data-chips style="display:flex;flex-wrap:wrap;gap:9px;max-width:520px">
         {vm.coverage.map((c) => (
-          <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(226,168,46,.28);background:rgba(226,168,46,.05);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;color:#d8d2c6"><span style="width:5px;height:5px;border-radius:50%;background:#E2A82E"></span>{c}</span>
+          <span class="cov-chip" data-ciudad={c} style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(226,168,46,.28);background:rgba(226,168,46,.05);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;color:#d8d2c6"><span style="width:5px;height:5px;border-radius:50%;background:#E2A82E"></span>{c}</span>
         ))}
       </div>
     </div>
-    <div data-rev="fade" style="position:relative;display:flex;align-items:center;justify-content:center;min-height:340px">
-      <div style="position:absolute;width:340px;height:340px;border:1px solid rgba(226,168,46,.12);border-radius:50%"></div>
-      <div style="position:absolute;width:240px;height:240px;border:1px solid rgba(226,168,46,.18);border-radius:50%"></div>
-      <div style="position:absolute;width:140px;height:140px;border:1px solid rgba(226,168,46,.26);border-radius:50%"></div>
-      <div style="position:absolute;width:340px;height:340px;border-radius:50%;background:conic-gradient(from 0deg,rgba(244,199,82,.22),transparent 28%);animation:beamSpin 7s linear infinite"></div>
-      <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px">
-        <div style="width:16px;height:16px;border-radius:50%;background:#F4C752;box-shadow:0 0 18px rgba(244,199,82,.8)"></div>
-        <div style="font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.5px;color:#F7F2E6">Bogotá</div>
+    <div data-rev="fade" style="display:flex;align-items:center;justify-content:center;min-height:340px">
+      <div class="radar" data-radar aria-hidden="true">
+        {/* Anillos a 10, 20 y 40 km: la escala es real. */}
+        <span class="radar-anillo" style="--d:25%"></span>
+        <span class="radar-anillo" style="--d:50%"><em>{RADIO_KM / 2} km</em></span>
+        <span class="radar-anillo" style="--d:100%"><em>{RADIO_KM} km</em></span>
+        <span class="radar-eje" style="width:100%;height:1px"></span>
+        <span class="radar-eje" style="width:1px;height:100%"></span>
+        <span class="radar-norte">N</span>
+        <span class="radar-barrido" data-barrido></span>
+        {puntos.map((p) => (
+          <span class="radar-punto" data-punto data-rumbo={p.rumbo.toFixed(1)} data-km={Math.round(p.km)} data-ciudad={p.nombre} style={`left:${p.x.toFixed(2)}%;top:${p.y.toFixed(2)}%`}></span>
+        ))}
+        <span class="radar-centro" data-centro>
+          <span class="radar-bogota"></span>
+          <b>Bogotá</b>
+        </span>
+        {/* Lectura del radar: el último municipio que tocó el barrido. Va fuera
+            del círculo porque varios municipios quedan a pocos píxeles. */}
+        <span class="radar-lectura" data-lectura></span>
       </div>
-      <div style="position:absolute;top:30%;left:24%;width:8px;height:8px;border-radius:50%;background:#E2A82E;opacity:.7;animation:pulseDot 2.2s ease-in-out infinite"></div>
-      <div style="position:absolute;top:64%;left:30%;width:8px;height:8px;border-radius:50%;background:#E2A82E;opacity:.7;animation:pulseDot 2.6s ease-in-out infinite"></div>
-      <div style="position:absolute;top:36%;right:22%;width:8px;height:8px;border-radius:50%;background:#E2A82E;opacity:.7;animation:pulseDot 2.9s ease-in-out infinite"></div>
-      <div style="position:absolute;bottom:24%;right:30%;width:8px;height:8px;border-radius:50%;background:#E2A82E;opacity:.7;animation:pulseDot 2.4s ease-in-out infinite"></div>
     </div>
   </div>
 </section>
+
+<style>
+  .radar { position: relative; width: min(340px, 100%); aspect-ratio: 1; }
+  .radar-anillo {
+    position: absolute; left: 50%; top: 50%; width: var(--d); height: var(--d); translate: -50% -50%;
+    border: 1px solid rgba(226,168,46,.2); border-radius: 50%;
+  }
+  .radar-anillo em { position: absolute; top: 14.6%; right: 14.6%; translate: 50% -50%; font-style: normal; font-size: 10px; letter-spacing: .5px; color: #6f6a61; background: #0a0a0c; padding: 0 3px; }
+  .radar-eje { position: absolute; left: 50%; top: 50%; translate: -50% -50%; background: rgba(226,168,46,.08); }
+  .radar-norte { position: absolute; left: 50%; top: -18px; translate: -50% 0; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #8b867c; }
+  /* Borde brillante en 0° (arriba) con la estela detrás, en sentido antihorario:
+     así, al girar en sentido horario, el borde va delante. El ángulo lo pone
+     cobertura.ts; sin JS queda quieto apuntando al norte. */
+  .radar-barrido {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 0 70%, rgba(244,199,82,.05) 80%, rgba(244,199,82,.3) 100%);
+    rotate: var(--barrido, 0deg);
+  }
+  .radar-punto {
+    position: absolute; width: 8px; height: 8px; translate: -50% -50%; border-radius: 50%;
+    background: #E2A82E; opacity: calc(.4 + var(--brillo, 0) * .6);
+    box-shadow: 0 0 calc(var(--brillo, 0) * 16px) rgba(244,199,82,.9);
+    scale: calc(1 + var(--brillo, 0) * .5);
+  }
+  .radar-lectura {
+    position: absolute; left: 50%; bottom: -30px; translate: -50% 0; white-space: nowrap;
+    font-family: var(--font-display); font-size: 12px; letter-spacing: 1px; color: #F4C752; min-height: 1em;
+  }
+  .radar-centro { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .radar-centro b { position: absolute; top: 20px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: .5px; color: #F7F2E6; white-space: nowrap; }
+  .radar-bogota { width: 14px; height: 14px; border-radius: 50%; background: #F4C752; box-shadow: 0 0 calc(10px + var(--golpe, 0) * 16px) rgba(244,199,82,.85); }
+  .cov-chip { transition: border-color .3s, background .3s, color .3s; }
+  .cov-chip[data-encendido] { border-color: rgba(244,199,82,.8) !important; background: rgba(244,199,82,.16) !important; color: #fff !important; }
+</style>

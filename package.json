@@ -9,14 +9,16 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "db:setup": "tsx scripts/db-setup.ts"
+    "db:setup": "tsx scripts/db-setup.ts",
+    "test": "tsx --test src/lib/motion/*.test.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^8.0.0",
     "@libsql/client": "^0.15.15",
     "@vercel/blob": "^2.5.0",
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "gsap": "^3.15.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

@@ -1,0 +1,180 @@
+---
+// Mini demo de cada servicio: en vez del mismo ícono de ecualizador para los
+// siete, cada tarjeta muestra lo que su texto promete ocurriendo (el vinilo
+// gira, el parlante empuja aire, el láser barre...).
+//
+// Todo es SVG + keyframes de CSS en múltiplos de var(--pulso), así laten al
+// mismo tempo que el rig del hero. Corren solo con la sección en pantalla
+// ([data-bucle] en Servicios) y sin animación el dibujo quieto se entiende igual.
+//
+// El orden sigue el de t.serv.items en src/i18n/strings.ts.
+interface Props { i: number; }
+const { i } = Astro.props;
+const barras = Array.from({ length: 22 }, (_, k) => ({
+  x: 110 + k * 5.6,
+  h: 10 + ((k * 37) % 29),
+  d: ((k * 7) % 8) / 8,
+}));
+const laser = Array.from({ length: 9 }, (_, k) => (k - 4) * 9);
+---
+<div class="demo" aria-hidden="true">
+  <svg viewBox="0 0 240 96" preserveAspectRatio="xMidYMid meet">
+    {i === 0 && (
+      <g>
+        {/* DJ: el vinilo gira a ~33 rpm (4 pulsos por vuelta) y la forma de onda late. */}
+        <g class="d-vinilo">
+          <circle cx="56" cy="48" r="34" fill="#141311" stroke="#2c2a26" />
+          {[28, 23, 18].map((r) => <circle cx="56" cy="48" r={r} fill="none" stroke="#24221f" />)}
+          <circle cx="56" cy="48" r="10" fill="#E2A82E" />
+          <rect x="54.5" y="38" width="3" height="6" rx="1" fill="#1a1206" />
+          <circle cx="56" cy="48" r="1.6" fill="#1a1206" />
+        </g>
+        <path d="M95 14 L84 22 L74 58" stroke="#8b867c" stroke-width="2" fill="none" stroke-linecap="round" />
+        {barras.map((b) => (
+          <rect class="d-onda" x={b.x} y={48 - b.h / 2} width="3" height={b.h} rx="1.5" fill="#F4C752" style={`animation-delay:calc(var(--pulso) * -${b.d})`} />
+        ))}
+        <line x1="166" y1="20" x2="166" y2="76" stroke="#fff" stroke-opacity=".7" />
+      </g>
+    )}
+    {i === 1 && (
+      <g>
+        {/* Sonido: el cono empuja en cada pulso y las ondas salen hacia la sala. */}
+        <rect x="40" y="10" width="58" height="76" rx="6" fill="#141311" stroke="#2c2a26" />
+        <circle cx="69" cy="28" r="7" fill="#1d1b18" stroke="#3a3731" />
+        <g class="d-cono">
+          <circle cx="69" cy="60" r="20" fill="#1d1b18" stroke="#3a3731" />
+          <circle cx="69" cy="60" r="12" fill="#26231f" stroke="#E2A82E" stroke-opacity=".5" />
+          <circle cx="69" cy="60" r="5" fill="#E2A82E" />
+        </g>
+        {[0, 1, 2].map((k) => (
+          <path class="d-arco" d="M112 30 Q124 48 112 66" fill="none" stroke="#F4C752" stroke-width="2" stroke-linecap="round" style={`animation-delay:calc(var(--pulso) * ${k} / 3 * -1)`} />
+        ))}
+      </g>
+    )}
+    {i === 2 && (
+      <g>
+        {/* Iluminación: el mismo salón cambia de ambiente (ámbar, magenta, azul). */}
+        <defs>
+          {['#F4C752', '#E278D2', '#78B4FF'].map((c, k) => (
+            <radialGradient id={`d-wash-${k}`} cx="50%" cy="0%" r="90%">
+              <stop offset="0" stop-color={c} stop-opacity=".5" />
+              <stop offset="1" stop-color={c} stop-opacity="0" />
+            </radialGradient>
+          ))}
+        </defs>
+        {[0, 1, 2].map((k) => (
+          <rect class="d-wash" x="0" y="0" width="240" height="96" fill={`url(#d-wash-${k})`} style={`animation-delay:calc(var(--pulso) * -${k * 4})`} />
+        ))}
+        <line x1="20" y1="74" x2="220" y2="74" stroke="#3a3731" />
+        {[50, 90, 150, 190].map((x) => (
+          <g fill="#0e0d0c">
+            <ellipse cx={x} cy="73" rx="14" ry="3" />
+            <rect x={x - 1} y="60" width="2" height="13" />
+            <ellipse cx={x} cy="59" rx="12" ry="2.6" />
+          </g>
+        ))}
+        {[60, 120, 180].map((x) => <rect x={x - 6} y="4" width="12" height="7" rx="2" fill="#2c2a26" />)}
+      </g>
+    )}
+    {i === 3 && (
+      <g>
+        {/* Show láser: abanico de haces que barre de lado a lado al compás. */}
+        <g class="d-laser">
+          {laser.map((a) => (
+            <line x1="120" y1="8" x2={120 + Math.sin((a * Math.PI) / 180) * 120} y2={8 + Math.cos((a * Math.PI) / 180) * 120} stroke="#F4C752" stroke-width="1.2" stroke-opacity=".85" />
+          ))}
+        </g>
+        <rect x="110" y="2" width="20" height="9" rx="2" fill="#2c2a26" />
+        <circle cx="120" cy="9" r="2" fill="#FCE7A8" />
+      </g>
+    )}
+    {i === 4 && (
+      <g>
+        {/* Luces robóticas: tres cabezas móviles que se cruzan y se abren. */}
+        {[[60, 0], [120, 1], [180, 0]].map(([x, alt]) => (
+          <g>
+            <g class:list={['d-cabeza', { 'd-alt': alt }]} style={`transform-origin:${x}px 12px`}>
+              <polygon points={`${x - 3},14 ${x + 3},14 ${x + 22},96 ${x - 22},96`} fill={alt ? '#E278D2' : '#F4C752'} fill-opacity=".28" />
+              <rect x={x - 5} y="9" width="10" height="7" rx="2" fill="#3a3731" />
+            </g>
+            <path d={`M${x - 8} 4 v6 a8 8 0 0 0 16 0 v-6`} fill="none" stroke="#2c2a26" stroke-width="2" />
+          </g>
+        ))}
+      </g>
+    )}
+    {i === 5 && (
+      <g>
+        {/* Cubrimiento 4K: visor de cámara grabando que busca foco y lo fija. */}
+        <circle cx="104" cy="52" r="9" fill="#2c2a26" />
+        <path d="M88 82 q16 -22 32 0" fill="#2c2a26" />
+        <circle cx="136" cy="50" r="8" fill="#26231f" />
+        <path d="M122 82 q14 -20 28 0" fill="#26231f" />
+        <rect class="d-foco" x="90" y="34" width="30" height="30" fill="none" stroke="#F4C752" stroke-width="1.5" />
+        {[[14, 10, 1, 1], [226, 10, -1, 1], [14, 86, 1, -1], [226, 86, -1, -1]].map(([x, y, sx, sy]) => (
+          <path d={`M${x} ${y + 10 * sy} V${y} H${x + 10 * sx}`} fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.5" />
+        ))}
+        <circle class="d-rec" cx="26" cy="22" r="4" fill="#ff5a4d" />
+        <text x="35" y="25.5" font-size="9" font-family="Space Grotesk, sans-serif" fill="#ffd9d4" letter-spacing="1">REC</text>
+        <text x="214" y="25.5" font-size="9" font-family="Space Grotesk, sans-serif" fill="#F4C752" text-anchor="end" letter-spacing="1">4K · 60</text>
+      </g>
+    )}
+    {i === 6 && (
+      <g>
+        {/* Dron: vista cenital; orbita el lugar del evento y lo registra desde arriba. */}
+        <rect x="90" y="22" width="60" height="52" rx="4" fill="none" stroke="#3a3731" stroke-dasharray="3 3" />
+        {[[104, 38], [120, 38], [136, 38], [104, 58], [120, 58], [136, 58]].map(([x, y]) => <circle cx={x} cy={y} r="4" fill="#26231f" />)}
+        <circle cx="120" cy="48" r="40" fill="none" stroke="#F4C752" stroke-opacity=".18" stroke-dasharray="2 4" />
+        <g class="d-orbita" style="transform-origin:120px 48px">
+          <g transform="translate(160 48)">
+            <circle r="15" fill="#F4C752" fill-opacity=".08" />
+            <line x1="-6" y1="-6" x2="6" y2="6" stroke="#ECE7DC" stroke-width="2" />
+            <line x1="6" y1="-6" x2="-6" y2="6" stroke="#ECE7DC" stroke-width="2" />
+            {[[-6, -6], [6, -6], [-6, 6], [6, 6]].map(([x, y]) => <circle class="d-rotor" cx={x} cy={y} r="3.6" fill="none" stroke="#F4C752" stroke-width="1" />)}
+            <circle r="2" fill="#ff5a4d" />
+          </g>
+        </g>
+      </g>
+    )}
+  </svg>
+</div>
+
+<style>
+  .demo {
+    height: 96px; margin-bottom: 18px; border-radius: 12px; overflow: hidden;
+    background: radial-gradient(120% 100% at 50% 0%, #141311, #0b0b0c);
+    border: 1px solid rgba(255,255,255,.07);
+  }
+  .demo svg { display: block; width: 100%; height: 100%; }
+  .demo :global(*) { transform-box: fill-box; }
+
+  .d-vinilo { transform-origin: 56px 48px; transform-box: view-box; animation: d-giro calc(var(--pulso) * 4) linear infinite; }
+  .d-onda { transform-origin: center; animation: d-late var(--pulso) ease-in-out infinite; }
+  .d-cono { transform-origin: center; animation: d-empuje var(--pulso) cubic-bezier(.2,.8,.3,1) infinite; }
+  .d-arco { transform-origin: 112px 48px; transform-box: view-box; animation: d-onda var(--pulso) linear infinite; }
+  .d-wash { animation: d-ambiente calc(var(--pulso) * 12) linear infinite; }
+  .d-laser { transform-origin: 120px 8px; transform-box: view-box; animation: d-barrido calc(var(--pulso) * 4) ease-in-out infinite alternate; }
+  .d-laser line { animation: d-parpadeo calc(var(--pulso) / 2) steps(2) infinite; }
+  .d-laser line:nth-child(odd) { animation-delay: calc(var(--pulso) / -4); }
+  .d-cabeza { transform-box: view-box; animation: d-cabeza calc(var(--pulso) * 4) ease-in-out infinite alternate; }
+  .d-cabeza.d-alt { animation-direction: alternate-reverse; }
+  .d-foco { transform-origin: center; animation: d-foco calc(var(--pulso) * 8) cubic-bezier(.3,.7,.2,1) infinite; }
+  .d-rec { animation: d-rec calc(var(--pulso) * 2) steps(1) infinite; }
+  .d-orbita { transform-box: view-box; animation: d-giro calc(var(--pulso) * 16) linear infinite; }
+  .d-rotor { transform-origin: center; animation: d-late calc(var(--pulso) / 4) linear infinite; }
+
+  @keyframes d-giro { to { transform: rotate(360deg); } }
+  @keyframes d-late { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+  @keyframes d-empuje { 0% { transform: scale(1.09); } 100% { transform: scale(1); } }
+  @keyframes d-onda { 0% { transform: translateX(0) scale(.7); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateX(90px) scale(1.5); opacity: 0; } }
+  @keyframes d-ambiente { 0%, 100% { opacity: 0; } 8%, 30% { opacity: 1; } 40% { opacity: 0; } }
+  @keyframes d-barrido { from { transform: rotate(-26deg); } to { transform: rotate(26deg); } }
+  @keyframes d-parpadeo { 50% { stroke-opacity: .35; } }
+  @keyframes d-cabeza { from { transform: rotate(32deg); } to { transform: rotate(-32deg); } }
+  @keyframes d-foco {
+    0% { transform: translate(18px, 6px) scale(1.5); opacity: .4; }
+    18% { transform: translate(-4px, -2px) scale(.9); opacity: 1; }
+    26%, 90% { transform: none; opacity: 1; stroke: #F4C752; }
+    100% { transform: none; opacity: .4; }
+  }
+  @keyframes d-rec { 50% { opacity: .15; } }
+</style>

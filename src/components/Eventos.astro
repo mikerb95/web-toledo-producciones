@@ -2,6 +2,14 @@
 import type { ViewModel } from '../lib/viewmodel';
 interface Props { vm: ViewModel; }
 const { vm } = Astro.props;
+// Ambiente de luz de cada tipo de evento, en el orden de t.ev.items.
+// Es un tinte sobre el video real, no un video distinto por evento.
+const AMBIENTES = [
+  'radial-gradient(80% 90% at 50% 0%,rgba(244,199,82,.55),transparent 70%)',
+  'radial-gradient(70% 90% at 30% 0%,rgba(226,120,210,.6),transparent 70%),radial-gradient(60% 80% at 80% 10%,rgba(244,199,82,.3),transparent 70%)',
+  'radial-gradient(50% 80% at 15% 0%,rgba(244,199,82,.5),transparent 70%),radial-gradient(50% 80% at 50% 0%,rgba(226,120,210,.45),transparent 70%),radial-gradient(50% 80% at 85% 0%,rgba(120,180,255,.5),transparent 70%)',
+  'radial-gradient(80% 90% at 50% 0%,rgba(120,180,255,.5),transparent 70%)',
+];
 ---
 <section id="eventos" class="checker-bg" style="position:relative;padding:clamp(70px,9vw,120px) clamp(20px,5vw,48px);border-top:1px solid rgba(226,168,46,.1)">
   <div style="max-width:1180px;margin:0 auto">
@@ -9,16 +17,41 @@ const { vm } = Astro.props;
       <div data-i18n="t.ev.kicker" style="font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#E2C277;font-weight:600;margin-bottom:14px">{vm.t.ev.kicker}</div>
       <h2 data-i18n="t.ev.title" style="font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.4vw,46px);line-height:1.04;letter-spacing:-1px;margin:0;color:#F4EFE3">{vm.t.ev.title}</h2>
     </div>
-    <div data-rev="fade" style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);aspect-ratio:16/8">
+    <div data-rev="fade" id="ev-escena" data-ambientes style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);aspect-ratio:16/8">
       <video src="/videos/galeria-1.mp4" autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+      {AMBIENTES.map((fondo, i) => (
+        <div class="ev-luz" data-ambiente-luz={i} aria-hidden="true" style={`background:${fondo}`}></div>
+      ))}
     </div>
-    <div data-rev="fade" style="display:flex;flex-wrap:wrap;gap:28px;margin-top:32px">
+    <div data-rev="fade" data-ambiente-lista style="display:flex;flex-wrap:wrap;gap:12px 16px;margin-top:22px">
       {vm.events.map((item, i) => (
-        <p style="flex:1 1 230px;margin:0;font-size:14.5px;line-height:1.55;color:#cdc7bc">
+        <button type="button" class="ev-item" data-ambiente={i} aria-pressed="false" aria-controls="ev-escena">
+          <span class="ev-barra" aria-hidden="true"><span></span></span>
           <strong data-i18n={`events.${i}.t`} style="font-family:var(--font-display);font-weight:700;font-size:17px;color:#F7F2E6;display:block;margin-bottom:6px">{item.t}</strong>
           <span data-i18n={`events.${i}.d`}>{item.d}</span>
-        </p>
+        </button>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .ev-luz { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity .9s ease; }
+  .ev-luz[data-activo] { opacity: 1; }
+
+  .ev-item {
+    flex: 1 1 230px; margin: 0; padding: 16px 16px 18px; text-align: left; cursor: pointer;
+    font: inherit; font-size: 14.5px; line-height: 1.55; color: #cdc7bc;
+    background: transparent; border: 1px solid transparent; border-radius: 14px;
+    transition: background .3s, border-color .3s, color .3s;
+  }
+  .ev-item:hover { background: rgba(255,255,255,.025); }
+  .ev-item:focus-visible { outline: 2px solid #E2A82E; outline-offset: 2px; }
+  .ev-item[aria-pressed="true"] { background: rgba(226,168,46,.06); border-color: rgba(226,168,46,.28); color: #e4ded2; }
+
+  /* Barra de avance del ambiente activo (solo con el avance automático). */
+  :global(.motion) .ev-barra { display: block; }
+  .ev-barra { display: none; height: 2px; margin-bottom: 14px; border-radius: 2px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .ev-barra > span { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #E2A82E, #FCE7A8); transform-origin: 0 50%; transform: scaleX(0); }
+  .ev-item[aria-pressed="true"] .ev-barra > span { transform: scaleX(var(--avance, 0)); }
+</style>

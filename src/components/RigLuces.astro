@@ -1,0 +1,102 @@
+---
+// Rig de luces del hero: un truss con cabezas móviles cuyos haces siguen al
+// cursor (o bailan solos al tempo), un abanico láser y un destello para el
+// "drop" al hacer clic. Todo decorativo (aria-hidden) y movido por
+// src/scripts/motion/hero.ts; sin JS queda un rig quieto con los haces
+// abiertos en abanico, que también se lee bien.
+//
+// Las cabezas marcadas con `escritorio` se esconden en móvil: cuatro haces en
+// 390 px ya llenan la pantalla.
+const cabezas = [
+  { x: 9, color: '#F4C752', a: 26, escritorio: false },
+  { x: 25, color: '#E278D2', a: 14, escritorio: true },
+  { x: 41, color: '#FCE7A8', a: 6, escritorio: false },
+  { x: 59, color: '#78B4FF', a: -6, escritorio: false },
+  { x: 75, color: '#E278D2', a: -14, escritorio: true },
+  { x: 91, color: '#F4C752', a: -26, escritorio: false },
+];
+const lasers = Array.from({ length: 11 });
+---
+<div class="rig" aria-hidden="true">
+  <div class="rig-humo"></div>
+  <svg class="rig-laser" data-laser>
+    <defs>
+      <linearGradient id="rig-laser-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="900">
+        <stop offset="0" stop-color="#FCE7A8" stop-opacity=".9" />
+        <stop offset=".55" stop-color="#F4C752" stop-opacity=".25" />
+        <stop offset="1" stop-color="#F4C752" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    {lasers.map(() => <line x1="0" y1="0" x2="0" y2="0" stroke="url(#rig-laser-fade)" stroke-width="1.2" />)}
+  </svg>
+  <div class="rig-truss"></div>
+  {cabezas.map((c) => (
+    <div class:list={['rig-cabeza', { 'rig-escritorio': c.escritorio }]} data-cabeza style={`left:${c.x}%;--color:${c.color}`}>
+      <div class="rig-giro" style={`transform:rotate(${c.a}deg)`}>
+        <span class="rig-haz"></span>
+        <span class="rig-lente"></span>
+      </div>
+      <span class="rig-yugo"></span>
+    </div>
+  ))}
+  <div class="rig-flash" data-flash></div>
+</div>
+
+<style>
+  /* --rig-scroll (0 a 1) lo escribe hero.ts al bajar: el rig se atenúa y sube. */
+  .rig { position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: calc(1 - var(--rig-scroll, 0) * .7); }
+  .rig-truss, .rig-cabeza { translate: 0 calc(var(--rig-scroll, 0) * -60px); }
+
+  /* Bruma de escenario: sin ella los haces parecen dibujados sobre negro. */
+  .rig-humo {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(70% 45% at 50% 18%, rgba(244,199,82,.07), transparent 70%),
+      radial-gradient(50% 40% at 20% 60%, rgba(226,120,210,.05), transparent 70%),
+      radial-gradient(50% 40% at 80% 55%, rgba(120,180,255,.05), transparent 70%);
+  }
+
+  .rig-truss {
+    position: absolute; left: -2%; right: -2%; top: 78px; height: 14px;
+    border-top: 1px solid rgba(255,255,255,.16);
+    border-bottom: 1px solid rgba(255,255,255,.16);
+    background:
+      repeating-linear-gradient(60deg, transparent 0 9px, rgba(255,255,255,.13) 9px 10px),
+      repeating-linear-gradient(-60deg, transparent 0 9px, rgba(255,255,255,.13) 9px 10px),
+      rgba(12,12,14,.9);
+  }
+
+  .rig-cabeza { position: absolute; top: 92px; width: 0; height: 0; }
+  .rig-yugo {
+    position: absolute; left: -13px; top: -2px; width: 26px; height: 12px;
+    border: 2px solid #2a2824; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .rig-giro { position: absolute; left: 0; top: 8px; width: 0; height: 0; transform-origin: 0 0; will-change: transform; }
+  .rig-lente {
+    position: absolute; left: -9px; top: -6px; width: 18px; height: 16px; border-radius: 4px 4px 9px 9px;
+    background: radial-gradient(circle at 50% 75%, #fff 0 2.5px, var(--color) 4px, #1a1916 7px);
+    box-shadow: 0 6px 18px -2px var(--color);
+  }
+  /* El haz es un cono (clip-path) con el centro más brillante (degradado
+     horizontal) que se apaga hacia abajo (máscara). Así tiene bordes suaves
+     sin pagar un filter: blur que se recalcule en cada giro. */
+  .rig-haz {
+    position: absolute; left: -170px; top: 4px; width: 340px; height: 135vh; min-height: 900px;
+    clip-path: polygon(48.5% 0, 51.5% 0, 100% 100%, 0 100%);
+    background: linear-gradient(90deg, transparent 8%, var(--color) 50%, transparent 92%);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.95), rgba(0,0,0,.35) 45%, transparent 82%);
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.95), rgba(0,0,0,.35) 45%, transparent 82%);
+    opacity: var(--haz, .34);
+    mix-blend-mode: screen;
+  }
+
+  .rig-laser { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .32; mix-blend-mode: screen; }
+  .rig-flash { position: absolute; inset: 0; background: radial-gradient(80% 70% at 50% 30%, #fff4d6, rgba(244,199,82,.4) 50%, transparent 85%); opacity: 0; }
+
+  @media (max-width: 700px) {
+    .rig-escritorio { display: none; }
+    .rig-truss { top: 70px; }
+    .rig-cabeza { top: 84px; }
+    .rig-haz { left: -120px; width: 240px; }
+  }
+</style>

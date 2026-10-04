@@ -21,12 +21,24 @@ const photos = [
       <h2 data-i18n="t.gal.title" style="font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.4vw,46px);line-height:1.04;letter-spacing:-1px;margin:0 0 14px;color:#F4EFE3">{vm.t.gal.title}</h2>
       <p data-i18n="t.gal.sub" style="font-size:15.5px;line-height:1.6;color:#a09a8f;margin:0">{vm.t.gal.sub}</p>
     </div>
-    <div data-rev="fade" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));grid-auto-rows:190px;gap:14px">
+    <div data-rev="fade" data-galeria style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));grid-auto-rows:190px;gap:14px">
       {spans.map((span, i) => (
-        <div style={`grid-row:span ${span};border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07)`}>
+        <div class="gal-foto" style={`grid-row:span ${span};border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.07)`}>
           <img src={photos[i]} alt="Momento de un evento producido por Toledo Producciones" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
         </div>
       ))}
+      <div class="gal-barrido" data-barrido aria-hidden="true"></div>
     </div>
   </div>
 </section>
+
+<style>
+  .gal-foto img { transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+  .gal-foto:hover img { transform: scale(1.05); }
+  /* Haz que cruza la rejilla al entrar (galeria.ts). Sin JS no se ve. */
+  .gal-barrido {
+    position: absolute; top: -8%; bottom: -8%; left: 0; width: 34%; pointer-events: none; opacity: 0;
+    background: linear-gradient(90deg, transparent, rgba(252,231,168,.28) 50%, transparent);
+    mix-blend-mode: screen; transform: skewX(-12deg);
+  }
+</style>

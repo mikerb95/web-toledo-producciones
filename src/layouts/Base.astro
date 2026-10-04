@@ -23,6 +23,16 @@ const ogImageURL = new URL('/og-image.jpg', Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Fail-open del motion: la clase .motion permite esconder lo que va a
+         entrar animado. Si el script de motion no confirma en 4 s (no cargó o
+         falló), se quita y todo queda visible. Con movimiento reducido ni se pone. -->
+    <script is:inline>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var r = document.documentElement;
+        r.classList.add('motion');
+        setTimeout(function () { if (!window.__motionOk) r.classList.remove('motion'); }, 4000);
+      }
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />

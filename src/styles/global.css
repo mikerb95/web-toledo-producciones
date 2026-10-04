@@ -20,6 +20,9 @@
   --wa-green: #25D366;
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Manrope', system-ui, sans-serif;
+  /* Un pulso a 124 BPM (src/lib/motion/pulso.ts). Todos los bucles de la
+     portada duran múltiplos de este valor para latir juntos. */
+  --pulso: 0.48387s;
 }
 
 * { box-sizing: border-box; }
@@ -36,9 +39,37 @@ a { color: inherit; text-decoration: none; }
 button { font-family: inherit; }
 input::placeholder, textarea::placeholder { color: #6a655c; }
 
-/* ── Reveal on-scroll ────────────────────────────────────────────── */
-[data-rev] { opacity: 0; }
-[data-rev][data-in] { opacity: 1; animation: slideUp .7s cubic-bezier(.2,.75,.2,1); }
+/* ── Entradas ("encender") ───────────────────────────────────────── */
+/* Solo se esconde lo que el script va a encender, y solo con .motion (ver
+   Base.astro). Sin JS o con movimiento reducido todo está visible. */
+.motion [data-rev]:not([data-in]),
+.motion [data-hero-entra]:not([data-in]) { opacity: 0; }
+.motion .hero-titulo:not([data-in]) { filter: brightness(.16); }
+
+/* ── Luz que sigue al cursor (tarjetas de servicios y paquetes) ──── */
+/* El script escribe --fx/--fy en cada tarjeta de la rejilla; el halo del
+   borde asoma también en las vecinas, como un seguidor de escenario. */
+[data-luz] > * { position: relative; }
+[data-luz] > *::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: radial-gradient(260px circle at var(--fx, -999px) var(--fy, -999px), rgba(244,199,82,.75), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0; transition: opacity .3s;
+}
+[data-luz] > *::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(340px circle at var(--fx, -999px) var(--fy, -999px), rgba(244,199,82,.07), transparent 70%);
+  opacity: 0; transition: opacity .3s;
+}
+[data-luz]:hover > *::before, [data-luz]:hover > *::after { opacity: 1; }
+
+/* ── Bucles que solo corren en pantalla ──────────────────────────── */
+/* Las demos y loops CSS marcados con [data-bucle] están en pausa hasta que
+   el script les pone data-vivo al entrar al viewport. */
+[data-bucle] *, [data-bucle] { animation-play-state: paused; }
+[data-bucle][data-vivo] *, [data-bucle][data-vivo] { animation-play-state: running; }
 
 /* ── Responsive nav ──────────────────────────────────────────────── */
 @media (max-width: 880px) { .nav-links { display: none !important; } }
@@ -99,5 +130,5 @@ input::placeholder, textarea::placeholder { color: #6a655c; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
-  [data-rev] { opacity: 1 !important; }
+  [data-rev], [data-hero-entra] { opacity: 1 !important; }
 }
