@@ -26,6 +26,7 @@ export interface EventoPagina {
   paquete: string;
   /** Índices de t.serv.items que más aplican, en orden de importancia. */
   servicios: number[];
+  /** La primera es el fondo del hero; las demás van en "Producciones reales". */
   fotos: string[];
   /** Tinte de luz sobre el video (también lo usa la sección Eventos de la portada). */
   ambiente: string;
@@ -38,7 +39,7 @@ export const EVENTOS: EventoPagina[] = [
     slug: 'bodas',
     paquete: 'estelar',
     servicios: [0, 2, 4, 3],
-    fotos: ['/images/galeria/montaje-terraza.jpeg', '/images/galeria/dj-terraza.jpeg'],
+    fotos: ['/images/galeria/montaje-terraza.jpeg', '/images/galeria/dj-terraza.jpeg', '/images/galeria/equipo-dj.jpeg'],
     ambiente: 'radial-gradient(80% 90% at 50% 0%,rgba(244,199,82,.55),transparent 70%)',
     es: {
       metaTitle: 'DJ, sonido y luces para bodas en Bogotá | Toledo Producciones',
@@ -73,7 +74,7 @@ export const EVENTOS: EventoPagina[] = [
     slug: 'quince-anos',
     paquete: 'estelar',
     servicios: [3, 4, 0, 6],
-    fotos: ['/images/galeria/luces-laser.jpeg', '/images/galeria/dj-pista.jpeg'],
+    fotos: ['/images/galeria/luces-laser.jpeg', '/images/galeria/dj-pista.jpeg', '/images/galeria/equipo-dj.jpeg'],
     ambiente: 'radial-gradient(70% 90% at 30% 0%,rgba(226,120,210,.6),transparent 70%),radial-gradient(60% 80% at 80% 10%,rgba(244,199,82,.3),transparent 70%)',
     es: {
       metaTitle: 'Show de luces y DJ para 15 años en Bogotá | Toledo Producciones',
@@ -108,7 +109,7 @@ export const EVENTOS: EventoPagina[] = [
     slug: 'cumpleanos',
     paquete: 'esencial',
     servicios: [0, 1, 2],
-    fotos: ['/images/galeria/cumpleanos-1.jpeg', '/images/galeria/cumpleanos-60.jpeg'],
+    fotos: ['/images/galeria/cumpleanos-1.jpeg', '/images/galeria/cumpleanos-60.jpeg', '/images/galeria/dj-pista.jpeg'],
     ambiente: 'radial-gradient(50% 80% at 15% 0%,rgba(244,199,82,.5),transparent 70%),radial-gradient(50% 80% at 50% 0%,rgba(226,120,210,.45),transparent 70%),radial-gradient(50% 80% at 85% 0%,rgba(120,180,255,.5),transparent 70%)',
     es: {
       metaTitle: 'DJ y luces para cumpleaños en Bogotá | Toledo Producciones',
@@ -143,7 +144,7 @@ export const EVENTOS: EventoPagina[] = [
     slug: 'eventos-empresariales',
     paquete: 'elite',
     servicios: [1, 5, 2, 0],
-    fotos: ['/images/galeria/equipo-dj.jpeg', '/images/galeria/montaje-terraza.jpeg'],
+    fotos: ['/images/galeria/equipo-dj.jpeg', '/images/galeria/montaje-terraza.jpeg', '/images/galeria/dj-terraza.jpeg'],
     ambiente: 'radial-gradient(80% 90% at 50% 0%,rgba(120,180,255,.5),transparent 70%)',
     es: {
       metaTitle: 'Producción de eventos empresariales en Bogotá | Toledo Producciones',
