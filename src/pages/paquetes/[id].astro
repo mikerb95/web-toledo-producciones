@@ -1,0 +1,207 @@
+---
+// Detalle de un paquete (/paquetes/esencial, /estelar, /elite). Reemplaza al
+// modal de la portada: misma información, pero con URL propia para compartir
+// por WhatsApp e indexar. SSR desde BD como el resto del sitio.
+import { Image } from 'astro:assets';
+import Pagina from '../../layouts/Pagina.astro';
+import { getContent } from '../../lib/content';
+import { buildVM } from '../../lib/viewmodel';
+import { FOTOS_PAQUETE } from '../../assets/packages/fotos';
+
+const content = await getContent();
+const i = content.packages.findIndex((p) => p.id === Astro.params.id);
+const fotos = FOTOS_PAQUETE[Astro.params.id ?? ''];
+if (i < 0 || !fotos) return new Response(null, { status: 404 });
+
+const vmEs = buildVM(content, 'es');
+const vmEn = buildVM(content, 'en');
+const store = JSON.stringify({ es: vmEs, en: vmEn });
+const vm = vmEs;
+const t = vm.t;
+const p = vm.packages[i];
+const a = p.accent;
+const otros = vm.packages.map((o, j) => ({ ...o, j })).filter((o) => o.j !== i);
+
+const raw = content.packages[i];
+const url = new URL(`/paquetes/${p.id}`, Astro.site).href;
+const imagen = fotos[0].src;
+const title = `Paquete ${raw.nameEs}: ${raw.tagEs} | Toledo Producciones`;
+const description = `${raw.tagEs}. Desde $${raw.price} COP. Incluye ${raw.featuresEs.slice(0, 4).join(', ')} y más. Eventos en Bogotá y municipios aledaños.`;
+const precio = Number(raw.price.replace(/\D/g, ''));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      name: `Paquete ${raw.nameEs}`,
+      description: raw.tagEs,
+      serviceType: 'Producción de eventos',
+      url,
+      image: new URL(imagen, Astro.site).href,
+      areaServed: content.coverage.es.map((city) => ({ '@type': 'City', name: city })),
+      provider: { '@type': 'EventPlanningService', name: 'Toledo Producciones', url: 'https://toledoproducciones.org' },
+      offers: {
+        '@type': 'Offer',
+        url,
+        priceCurrency: 'COP',
+        price: precio,
+        priceSpecification: { '@type': 'PriceSpecification', minPrice: precio, priceCurrency: 'COP' },
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://toledoproducciones.org/' },
+        { '@type': 'ListItem', position: 2, name: 'Paquetes', item: new URL('/paquetes', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: raw.nameEs, item: url },
+      ],
+    },
+  ],
+};
+---
+
+<Pagina vm={vm} store={store} title={title} description={description} image={imagen} jsonLd={jsonLd}>
+  <article data-paquete={i} class="checker-bg" style="position:relative;overflow:hidden;padding:clamp(108px,14vw,140px) clamp(20px,5vw,48px) clamp(70px,9vw,110px)">
+    <div aria-hidden="true" style={`position:absolute;top:-120px;right:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,${a}2e,transparent 65%);filter:blur(40px);pointer-events:none`}></div>
+
+    <div style="position:relative;max-width:1080px;margin:0 auto">
+      <a href="/paquetes" class="back-link" style="display:inline-flex;align-items:center;gap:7px;color:#8b867c;font-size:13.5px;font-weight:600;margin-bottom:28px">
+        <span aria-hidden="true">←</span> <span data-i18n="t.pkg.back">{t.pkg.back}</span>
+      </a>
+
+      <!-- Cabecera: datos a la izquierda, foto (la misma de la tarjeta) a la derecha -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(28px,5vw,56px);align-items:center">
+        <div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:16px">
+            <span style={`font-family:var(--font-display);font-weight:700;font-size:13px;color:${a};border:1px solid ${a}66;border-radius:999px;width:30px;height:30px;display:flex;align-items:center;justify-content:center`}>{p.num}</span>
+            {p.popular && (
+              <span data-i18n="t.pkg.popular" data-i18n-prefix="★ " style="background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:11px;letter-spacing:.5px;padding:6px 12px;border-radius:999px">★ {t.pkg.popular}</span>
+            )}
+            {p.drone && (
+              <span data-i18n="t.pkg.droneTag" data-i18n-prefix="◆ " style={`background:${a}1f;border:1px solid ${a}66;color:${a};font-weight:700;font-size:11.5px;letter-spacing:.5px;padding:6px 12px;border-radius:999px`}>◆ {t.pkg.droneTag}</span>
+            )}
+          </div>
+          <h1 data-i18n={`packages.${i}.name`} style="font-family:var(--font-display);font-weight:700;font-size:clamp(42px,7vw,72px);line-height:1;letter-spacing:-1.5px;margin:0 0 14px;color:#F7F2E6">{p.name}</h1>
+          <p data-i18n={`packages.${i}.tag`} style="font-size:clamp(16px,2vw,19px);line-height:1.55;color:#b6b0a4;max-width:480px;margin:0">{p.tag}</p>
+          <div style="display:flex;align-items:baseline;gap:10px;margin-top:26px">
+            <span data-i18n={`packages.${i}.price`} style={`font-family:var(--font-display);font-weight:700;font-size:clamp(38px,6vw,56px);line-height:1;color:${a}`}>{p.price}</span>
+            <span data-i18n={`packages.${i}.priceNote`} style="font-size:13px;color:#7d786f;font-weight:500">{p.priceNote}</span>
+          </div>
+          <p data-i18n={`packages.${i}.badge`} style="font-size:14px;color:#8b867c;margin:12px 0 28px">{p.badge}</p>
+          <a href="#reservar" class="gold-cta" data-magnetico style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:15px;padding:14px 26px;border-radius:999px;box-shadow:0 12px 36px rgba(226,168,46,.3)">
+            <span data-i18n="t.pkg.reserve">{t.pkg.reserve}</span> <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+        <div style="position:relative;aspect-ratio:16/10;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 80px rgba(0,0,0,.5)">
+          <Image src={fotos[0]} alt={p.name} width={760} height={475} loading="eager" style={`position:absolute;inset:0;width:100%;height:100%;object-fit:cover;view-transition-name:pkg-foto-${p.id}`} />
+        </div>
+      </div>
+
+      <!-- Qué incluye -->
+      <section data-rev="up" style="margin-top:clamp(56px,8vw,88px)">
+        <h2 data-i18n="t.pkg.includes" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin:0 0 22px">{t.pkg.includes}</h2>
+        <ul id="pkg-features" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px 28px">
+          {p.features.map((f) => (
+            <li style="display:flex;align-items:flex-start;gap:12px;font-size:15.5px;line-height:1.5;color:#dcd6cb">
+              <span aria-hidden="true" style={`flex-shrink:0;width:22px;height:22px;border-radius:50%;background:${a}22;border:1px solid ${a}66;display:flex;align-items:center;justify-content:center;color:${a};font-size:11px;margin-top:1px`}>✓</span>
+              <span data-texto>{f}</span>
+            </li>
+          ))}
+        </ul>
+        {p.drone && (
+          <div style="margin-top:26px;border:1px solid rgba(244,199,82,.3);border-radius:18px;background:linear-gradient(120deg,rgba(244,199,82,.08),rgba(255,255,255,.02));padding:22px 24px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <span style="width:9px;height:9px;border-radius:50%;background:#ff5a4d;box-shadow:0 0 10px #ff5a4d;animation:pulseDot 1.4s ease-in-out infinite"></span>
+              <span data-i18n="t.drone.hud" style="font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:1.5px;color:#F4C752">{t.drone.hud}</span>
+            </div>
+            <p data-i18n="t.drone.sub" style="font-size:15px;line-height:1.55;color:#dcd6cb;margin:0">{t.drone.sub}</p>
+          </div>
+        )}
+      </section>
+
+      <!-- Arma tu reserva: el enlace de WhatsApp se arma con lo que llene -->
+      <section id="reservar" style="margin-top:clamp(48px,7vw,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px;align-items:stretch;scroll-margin-top:90px">
+        <div data-rev="fade" id="pkg-form" style="border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:clamp(22px,4vw,30px);background:rgba(255,255,255,.03)">
+          <h2 data-i18n="t.pkg.customize" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#E2C277;font-weight:600;margin:0 0 18px">{t.pkg.customize}</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;margin-bottom:18px">
+            <label style="display:block">
+              <span data-i18n="t.pkg.f_name" class="pkg-label">{t.pkg.f_name}</span>
+              <input id="pkg-c-name" type="text" autocomplete="name" placeholder={t.pkg.f_namePh} class="pkg-input" />
+            </label>
+            <label style="display:block">
+              <span data-i18n="t.pkg.f_date" class="pkg-label">{t.pkg.f_date}</span>
+              <input id="pkg-c-date" type="date" class="pkg-input" />
+            </label>
+          </div>
+          <div data-i18n="t.pkg.f_extras" class="pkg-label" style="margin-bottom:10px">{t.pkg.f_extras}</div>
+          <div id="pkg-extras" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px">
+            {vm.additionalServices.items.map((item, ei) => (
+              <label class="pkg-extra">
+                <input type="checkbox" data-extra={ei} />
+                <span data-texto>{item}</span>
+              </label>
+            ))}
+          </div>
+          <a id="pkg-reserve" href={p.waLink} target="_blank" rel="noopener" class="gold-cta" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#F4C752,#D89A24);color:#1a1206;font-weight:700;font-size:16px;padding:16px 30px;border-radius:999px;box-shadow:0 12px 36px rgba(226,168,46,.32)">
+            <span data-i18n="t.pkg.reserve">{t.pkg.reserve}</span> <span aria-hidden="true" style="font-size:18px">→</span>
+          </a>
+        </div>
+        <div data-rev="fade" style="position:relative;min-height:260px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
+          <Image src={fotos[1]} alt="" width={640} height={480} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+        </div>
+      </section>
+
+      <!-- Otros paquetes -->
+      <section style="margin-top:clamp(64px,9vw,100px)">
+        <h2 data-rev="up" data-i18n="t.pkg.others" style="font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.6px;margin:0 0 22px;color:#F4EFE3">{t.pkg.others}</h2>
+        <div data-luz style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px">
+          {otros.map((o) => (
+            <a href={`/paquetes/${o.id}`} class="pkg-otro" data-rev="fade">
+              <div style="position:relative;width:132px;flex-shrink:0;align-self:stretch;min-height:104px;border-radius:14px;overflow:hidden">
+                <Image src={FOTOS_PAQUETE[o.id][0]} alt="" width={264} height={208} style={`position:absolute;inset:0;width:100%;height:100%;object-fit:cover;view-transition-name:pkg-foto-${o.id}`} />
+              </div>
+              <div style="min-width:0">
+                <div data-i18n={`packages.${o.j}.name`} style="font-family:var(--font-display);font-weight:600;font-size:21px;color:#F4EFE3;margin-bottom:4px">{o.name}</div>
+                <div data-i18n={`packages.${o.j}.tag`} style="font-size:13.5px;line-height:1.45;color:#9a948a;margin-bottom:10px">{o.tag}</div>
+                <div style="display:flex;align-items:baseline;gap:7px">
+                  <span data-i18n={`packages.${o.j}.price`} style={`font-family:var(--font-display);font-weight:700;font-size:20px;color:${o.accent}`}>{o.price}</span>
+                  <span data-i18n={`packages.${o.j}.priceNote`} style="font-size:11.5px;color:#7d786f">{o.priceNote}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <script>
+    import '../../scripts/package-detail';
+  </script>
+</Pagina>
+
+<style>
+  .pkg-label { display: block; font-size: 12px; font-weight: 600; color: #a8a293; margin-bottom: 7px; }
+  .pkg-input {
+    width: 100%; background: rgba(8,8,10,.6); border: 1px solid rgba(255,255,255,.14); border-radius: 11px;
+    padding: 13px 15px; color: #ECE7DC; font-family: inherit; font-size: 14.5px; outline: none; color-scheme: dark;
+  }
+  .pkg-input:focus { border-color: #E2A82E; }
+  .pkg-extra {
+    display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #cdc7bc; cursor: pointer;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 9px 15px;
+    transition: border-color .2s, background-color .2s;
+  }
+  .pkg-extra:hover { border-color: rgba(226,168,46,.4); }
+  .pkg-extra:has(input:checked) { border-color: rgba(226,168,46,.55); background: rgba(226,168,46,.08); }
+  .pkg-extra input { width: 15px; height: 15px; margin: 0; accent-color: #E2A82E; }
+  .pkg-otro {
+    display: flex; gap: 16px; align-items: center; padding: 12px; border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012));
+    border: 1px solid rgba(255,255,255,.09);
+    transition: border-color .3s, transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .pkg-otro:hover { border-color: rgba(226,168,46,.45); transform: translateY(-3px); }
+  .pkg-otro:focus-visible { outline: 2px solid #E2A82E; outline-offset: 3px; }
+</style>
