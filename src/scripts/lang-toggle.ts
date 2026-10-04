@@ -4,7 +4,7 @@ import { getStore, getLang, setLang, resolve } from './store';
 import type { Lang } from '../i18n/strings';
 
 declare global {
-  interface Window { __toledoApplyLang?: (lang: Lang) => void; __toledoRefreshModal?: (lang: Lang) => void; }
+  interface Window { __toledoApplyLang?: (lang: Lang) => void; __toledoRefreshPage?: (lang: Lang) => void; }
 }
 
 function applyLang(lang: Lang): void {
@@ -39,8 +39,8 @@ function applyLang(lang: Lang): void {
   document.documentElement.lang = lang;
   setLang(lang);
 
-  // Refresca el modal de paquete si está abierto.
-  window.__toledoRefreshModal?.(lang);
+  // Deja que la página repinte lo que no cabe en data-i18n (listas por idioma).
+  window.__toledoRefreshPage?.(lang);
 }
 
 window.__toledoApplyLang = applyLang;
