@@ -120,12 +120,13 @@ export function hero(): void {
 
   // ── Entrada ────────────────────────────────────────────────────────
   // Las luces se cierran sobre el título y, justo cuando lo cruzan, el
-  // título prende. Luego entra el resto en cadena.
+  // título se enciende de forma gradual. Luego entra el resto en cadena.
   gsap.to(mando, { intro: 0, duration: 1.6, ease: 'power3.inOut', delay: 0.15 });
   titulo.setAttribute('data-in', '');
   gsap.fromTo(titulo, { filter: 'brightness(.16)' }, {
-    keyframes: { filter: ['brightness(.16)', 'brightness(.9)', 'brightness(.3)', 'brightness(1.25)', 'brightness(1)'], easeEach: 'none' },
-    duration: 0.7,
+    filter: 'brightness(1)',
+    ease: 'power2.inOut',
+    duration: 1.1,
     delay: 0.9,
     clearProps: 'filter',
   });

@@ -29,8 +29,9 @@ export function galeria(): void {
       const celda = img.parentElement as HTMLElement;
       const centro = (celda.offsetLeft + celda.offsetWidth / 2) / ancho;
       tl.fromTo(img, { filter: APAGADA }, {
-        keyframes: { filter: [APAGADA, 'brightness(1.25) saturate(1.1)', 'brightness(.55) saturate(.7)', ENCENDIDA], easeEach: 'none' },
-        duration: 0.5,
+        filter: ENCENDIDA,
+        ease: 'power2.out',
+        duration: 0.8,
         clearProps: 'filter',
       }, Math.max(0, centro * recorrido - 0.15));
     });

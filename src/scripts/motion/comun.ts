@@ -23,21 +23,15 @@ export function alVer(el: Element, dentro: () => void, fuera?: () => void, marge
 }
 
 /**
- * El gesto común de entrada: el elemento "prende" como un foco de escenario
- * (un parpadeo corto antes de quedar fijo) mientras sube un poco. Se usa en
- * vez de un fundido genérico para que cada aparición se lea como una luz.
+ * El gesto común de entrada: el elemento sube un poco mientras su luz crece
+ * de forma continua, como un dimmer que se levanta (sin parpadeos).
  */
 export function encender(el: Element | Element[], retardo = 0): gsap.core.Timeline {
-  // `fromTo` con keyframes no pinta el estado inicial hasta que arranca: sin
-  // este set, lo que espera su retardo se ve un instante y luego se apaga.
+  // Estado inicial explícito: sin este set, lo que espera su retardo se ve un
+  // instante y luego se apaga.
   gsap.set(el, { opacity: 0, y: 22 });
   const tl = gsap.timeline({ delay: retardo });
-  tl.fromTo(el, { opacity: 0 }, {
-    keyframes: { opacity: [0, 0.85, 0.2, 0.9, 0.55, 1], easeEach: 'none' },
-    duration: 0.55,
-    stagger: 0.08,
-    clearProps: 'opacity',
-  }, 0);
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.9, ease: 'power2.out', stagger: 0.08, clearProps: 'opacity' }, 0);
   tl.fromTo(el, { y: 22 }, { y: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08, clearProps: 'transform' }, 0);
   return tl;
 }
