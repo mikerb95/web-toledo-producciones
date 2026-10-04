@@ -5,8 +5,9 @@
 Sitio web de Toledo Producciones — productora de eventos en Bogotá (DJ, sonido,
 iluminación, show láser, luces robóticas, cubrimiento 4K y cubrimiento en dron).
 
-Implementado a partir del diseño de Claude Design. Landing one-page bilingüe
-(ES/EN) + panel de administración para editar contenido.
+Implementado a partir del diseño de Claude Design. Sitio bilingüe (ES/EN):
+portada, páginas de paquetes, de tipos de evento, de dron y galería, más un
+panel de administración para editar contenido.
 
 ## Stack
 
@@ -20,14 +21,21 @@ Implementado a partir del diseño de Claude Design. Landing one-page bilingüe
 ```
 src/
   data/defaults.ts     Contenido por defecto + tipos (seed y fallback)
+  data/eventos.ts      Textos de las páginas por tipo de evento (no editables aún)
+  data/galeria.ts      Fotos de la galería con su texto alternativo
+  data/dron.ts         Preguntas frecuentes de /cubrimiento-dron
+  layouts/Pagina.astro Marco de las páginas internas (nav, footer, idioma, motion)
   i18n/strings.ts      Textos de UI bilingües (no editables)
   lib/                 db, content (CRUD), auth, wa, viewmodel
   components/          Secciones del sitio (.astro)
-  scripts/             Islands JS: lang-toggle, package-modal, contact-form, login, admin
+  scripts/             Islands JS: lang-toggle, package-detail, galeria-visor, contact-form, login, admin
   scripts/motion/      Motion de la portada (GSAP): rig del hero, entradas, radar, ambientes
   lib/motion/          Lógica pura del motion (tempo, geometría del rig, mapa) con tests
   pages/
-    index.astro        Sitio público (SSR desde BD)
+    index.astro        Portada (SSR desde BD)
+    paquetes/          /paquetes y /paquetes/[id] (esencial, estelar, elite)
+    [evento].astro     /bodas, /quince-anos, /cumpleanos, /eventos-empresariales
+    cubrimiento-dron.astro, galeria.astro
     admin/index.astro  Panel admin (login + 3 pestañas)
     api/               login, logout, content
   middleware.ts        Calcula locals.authed desde la cookie
