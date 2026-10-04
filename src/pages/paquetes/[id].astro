@@ -25,7 +25,7 @@ const otros = vm.packages.map((o, j) => ({ ...o, j })).filter((o) => o.j !== i);
 const raw = content.packages[i];
 const url = new URL(`/paquetes/${p.id}`, Astro.site).href;
 const imagen = fotos[0].src;
-const title = `Paquete ${raw.nameEs}: ${raw.tagEs} | Toledo Producciones`;
+const title = `Paquete ${raw.nameEs} · ${raw.tagEs} | Toledo Producciones`;
 const description = `${raw.tagEs}. Desde $${raw.price} COP. Incluye ${raw.featuresEs.slice(0, 4).join(', ')} y más. Eventos en Bogotá y municipios aledaños.`;
 const precio = Number(raw.price.replace(/\D/g, ''));
 
