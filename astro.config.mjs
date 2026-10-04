@@ -21,8 +21,8 @@ export default defineConfig({
       // Las rutas dinámicas SSR no se descubren solas. Los ids de paquete son
       // fijos (el admin edita su contenido, no los crea ni los borra).
       customPages: DEFAULTS.packages.map((p) => `${SITE}/paquetes/${p.id}`),
-      // Sin barra final, igual que el canonical de cada página.
-      serialize: (item) => ({ ...item, url: item.url.replace(/(?<=.)\/$/, '').replace(/\.org$/, '.org/') }),
+      // Sin barra final (salvo la raíz), igual que el canonical de cada página.
+      serialize: (item) => ({ ...item, url: item.url === `${SITE}/` ? item.url : item.url.replace(/\/$/, '') }),
     }),
   ],
 });
