@@ -21,7 +21,7 @@ export interface UIStrings {
   gal: { kicker: string; title: string; sub: string; ph: string };
   cov: { kicker: string; title: string; sub: string };
   contact: { kicker: string; title: string; sub: string; f_name: string; f_event: string; f_date: string; f_msg: string; send: string; or: string; wa: string; ig: string; mail: string; evOpts: string[] };
-  footer: { tagline: string; contact: string; zone: string; slogan: string; rights: string };
+  footer: { tagline: string; contact: string; zone: string; slogan: string; rights: string; credit: string };
 }
 
 const es: UIStrings = {
@@ -66,7 +66,7 @@ const es: UIStrings = {
     f_name: 'Nombre', f_event: 'Tipo de evento', f_date: 'Fecha tentativa', f_msg: 'Cuéntanos de tu evento', send: 'Enviar por WhatsApp', or: 'o escríbenos directo', wa: 'WhatsApp', ig: 'Instagram', mail: 'Correo',
     evOpts: ['Boda', '15 Años', 'Cumpleaños', 'Evento empresarial', 'Otro'],
   },
-  footer: { tagline: 'Producción de eventos con sonido, iluminación, láser y cubrimiento 4K al precio justo.', contact: 'Contacto', zone: 'Zona de cobertura', slogan: 'Hacemos que tu evento brille', rights: '' },
+  footer: { tagline: 'Producción de eventos con sonido, iluminación, láser y cubrimiento 4K al precio justo.', contact: 'Contacto', zone: 'Zona de cobertura', slogan: 'Hacemos que tu evento brille', rights: '', credit: 'Sitio creado por' },
 };
 
 const en: UIStrings = {
@@ -111,7 +111,7 @@ const en: UIStrings = {
     f_name: 'Name', f_event: 'Event type', f_date: 'Tentative date', f_msg: 'Tell us about your event', send: 'Send on WhatsApp', or: 'or reach us directly', wa: 'WhatsApp', ig: 'Instagram', mail: 'Email',
     evOpts: ['Wedding', 'Quinceañera', 'Birthday', 'Corporate event', 'Other'],
   },
-  footer: { tagline: 'Event production with sound, lighting, laser and 4K coverage at a fair price.', contact: 'Contact', zone: 'Coverage area', slogan: 'We make your event shine', rights: '' },
+  footer: { tagline: 'Event production with sound, lighting, laser and 4K coverage at a fair price.', contact: 'Contact', zone: 'Coverage area', slogan: 'We make your event shine', rights: '', credit: 'Site crafted by' },
 };
 
 export const STRINGS: Record<Lang, UIStrings> = { es, en };
