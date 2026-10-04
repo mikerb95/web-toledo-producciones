@@ -1,0 +1,43 @@
+---
+// Los tres paquetes en una página propia. Es la misma sección de la portada;
+// cada tarjeta lleva al detalle (/paquetes/[id]).
+import Pagina from '../../layouts/Pagina.astro';
+import Paquetes from '../../components/Paquetes.astro';
+import Contacto from '../../components/Contacto.astro';
+import { getContent } from '../../lib/content';
+import { buildVM } from '../../lib/viewmodel';
+
+const content = await getContent();
+const vmEs = buildVM(content, 'es');
+const vmEn = buildVM(content, 'en');
+const store = JSON.stringify({ es: vmEs, en: vmEn });
+
+const desde = content.packages.map((p) => `${p.nameEs} desde $${p.price}`).join(', ');
+const title = 'Paquetes de DJ, sonido, luces y láser en Bogotá | Toledo Producciones';
+const description = `Tres paquetes de producción para bodas, 15 años, cumpleaños y eventos empresariales en Bogotá: ${desde} COP.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Paquetes de Toledo Producciones',
+  itemListElement: content.packages.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: `Paquete ${p.nameEs}`,
+    url: new URL(`/paquetes/${p.id}`, Astro.site).href,
+  })),
+};
+---
+
+<Pagina vm={vmEs} store={store} title={title} description={description} jsonLd={jsonLd}>
+  <!-- El relleno superior es un periodo exacto del ajedrezado (50px), así el
+       fondo continúa sin costura bajo la nav fija. -->
+  <div class="checker-bg" style="padding-top:50px">
+    <Paquetes vm={vmEs} principal />
+  </div>
+  <Contacto vm={vmEs} />
+
+  <script>
+    import '../../scripts/contact-form';
+  </script>
+</Pagina>
