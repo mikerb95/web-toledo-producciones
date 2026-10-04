@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import { DEFAULTS } from './src/data/defaults.ts';
+import { EVENTOS } from './src/data/eventos.ts';
 
 const SITE = 'https://toledoproducciones.org';
 
@@ -20,7 +21,10 @@ export default defineConfig({
       filter: (page) => !page.includes('/admin') && !page.includes('/api/'),
       // Las rutas dinámicas SSR no se descubren solas. Los ids de paquete son
       // fijos (el admin edita su contenido, no los crea ni los borra).
-      customPages: DEFAULTS.packages.map((p) => `${SITE}/paquetes/${p.id}`),
+      customPages: [
+        ...DEFAULTS.packages.map((p) => `${SITE}/paquetes/${p.id}`),
+        ...EVENTOS.map((e) => `${SITE}/${e.slug}`),
+      ],
       // Sin barra final (salvo la raíz), igual que el canonical de cada página.
       serialize: (item) => ({ ...item, url: item.url === `${SITE}/` ? item.url : item.url.replace(/\/$/, '') }),
     }),
