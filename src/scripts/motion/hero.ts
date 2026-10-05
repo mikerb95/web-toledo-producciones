@@ -4,9 +4,11 @@
 // Clic o tap en la pista (fuera de los botones) = "drop": destello, abanico
 // abierto y láser a tope durante dos pulsos.
 //
-// Un solo bucle en gsap.ticker para todo, parado fuera de pantalla.
+// Un solo bucle en gsap.ticker para todo, parado fuera de pantalla. La luz se
+// dibuja en WebGL (rig-gl.ts) si se puede; si no, con los haces CSS.
 import { gsap } from 'gsap';
 import { anguloHacia, coreografia } from '../../lib/motion/rig';
+import { crearRigGL, hexARgb, type HazGL, type RigGL } from './rig-gl';
 import { PULSO_S, golpe, fase } from '../../lib/motion/pulso';
 import { alVer, encender, punteroFino } from './comun';
 
@@ -18,9 +20,24 @@ export function hero(): void {
   const laser = raiz.querySelector<SVGSVGElement>('[data-laser]')!;
   const flash = raiz.querySelector<HTMLElement>('[data-flash]')!;
   const titulo = raiz.querySelector<HTMLElement>('.hero-titulo')!;
+  const rig = raiz.querySelector<HTMLElement>('[data-rig]')!;
+  const lienzo = raiz.querySelector<HTMLCanvasElement>('[data-rig-gl]');
+
+  // Distancia del pivote de la cabeza al centro del lente (RigLuces.astro).
+  const LENTE = 16;
+
+  // ── WebGL ──────────────────────────────────────────────────────────
+  // Si se pierde el contexto (pasa, p. ej., si el proceso de GPU se reinicia),
+  // se vuelve a los haces CSS con el mismo fundido.
+  let luz: RigGL | null = null;
+  const apagarGL = () => { luz = null; rig.removeAttribute('data-gl'); };
+  if (lienzo) {
+    luz = crearRigGL(lienzo, apagarGL);
+    if (luz) rig.setAttribute('data-gl', '');
+  }
 
   // ── Medidas (se rehacen al cambiar el tamaño) ──────────────────────
-  let visibles: { el: HTMLElement; giro: HTMLElement; x: number; y: number }[] = [];
+  let visibles: { el: HTMLElement; giro: HTMLElement; x: number; y: number; color: [number, number, number] }[] = [];
   let ancho = 0;
   let alto = 0;
   const medir = () => {
@@ -28,9 +45,15 @@ export function hero(): void {
     ancho = r.width;
     alto = r.height;
     laser.setAttribute('viewBox', `0 0 ${ancho} ${alto}`);
+    luz?.medir(ancho, alto);
+    // (x, y) es el pivote de la cabeza, en medidas de maquetación (ajenas a
+    // los transforms): de ahí cuelga el haz y hacia ahí se calcula el giro.
     visibles = cabezas
       .filter((c) => c.offsetParent !== null)
-      .map((c) => ({ el: c, giro: c.querySelector<HTMLElement>('.rig-giro')!, x: c.offsetLeft, y: c.offsetTop }));
+      .map((c) => {
+        const giro = c.querySelector<HTMLElement>('.rig-giro')!;
+        return { el: c, giro, x: c.offsetLeft, y: c.offsetTop + giro.offsetTop, color: hexARgb(c.dataset.color || '#F4C752') };
+      });
   };
   const angulos: number[] = [];
   medir();
@@ -38,7 +61,8 @@ export function hero(): void {
 
   // ── Estado ─────────────────────────────────────────────────────────
   // Peso del cursor frente a la coreografía (0 = baila solo, 1 = sigue al cursor).
-  const mando = { cursor: 0, drop: 0, intro: 1 };
+  const mando = { cursor: 0, drop: 0, intro: 1, nivel: 0 };
+  const haces: HazGL[] = [];
   let objetivo = { x: ancho / 2, y: alto * 0.45 };
   let quietoDesde = 0;
   let scrollY = window.scrollY;
@@ -90,16 +114,27 @@ export function hero(): void {
       a = a + (-p * 58 - a) * mando.intro;
       angulos[i] = (angulos[i] ?? a) + (a - (angulos[i] ?? a)) * 0.14;
       c.giro.style.transform = `rotate(${angulos[i].toFixed(2)}deg)`;
-      c.el.style.setProperty('--haz', (0.26 + 0.12 * b + 0.25 * mando.drop).toFixed(3));
+      const intensidad = 0.26 + 0.12 * b + 0.25 * mando.drop;
+      if (luz) {
+        const rad = (angulos[i] * Math.PI) / 180;
+        haces[i] = { x: c.x - Math.sin(rad) * LENTE, y: c.y + Math.cos(rad) * LENTE, a: angulos[i], i: intensidad * 2.2, color: c.color };
+      } else {
+        c.el.style.setProperty('--haz', intensidad.toFixed(3));
+      }
     });
+    haces.length = n;
 
     // Láser: abanico desde el centro del truss que respira al compás.
     const ex = ancho / 2;
     const ey = visibles[0]?.y ?? 90;
     const apertura = 0.35 + 0.25 * Math.sin(fase(t, 8) * Math.PI * 2) + 0.5 * mando.drop;
     const giro = 0.18 * Math.sin(fase(t, 16) * Math.PI * 2);
+    const intensidadLaser = 0.16 + 0.14 * b + 0.5 * mando.drop;
+    if (luz) {
+      luz.dibujar({ t, haces, nivel: mando.nivel, laser: { x: ex, y: ey, giro, apertura, i: intensidadLaser * 1.6 } });
+    }
     const m = lineas.length;
-    lineas.forEach((l, k) => {
+    if (!luz) lineas.forEach((l, k) => {
       const q = m > 1 ? k / (m - 1) - 0.5 : 0;
       const ang = giro + q * apertura * 2;
       l.setAttribute('x1', ex.toFixed(1));
@@ -107,7 +142,8 @@ export function hero(): void {
       l.setAttribute('x2', (ex + Math.sin(ang) * alto * 1.4).toFixed(1));
       l.setAttribute('y2', (ey + Math.cos(ang) * alto * 1.4).toFixed(1));
     });
-    laser.style.opacity = (0.16 + 0.14 * b + 0.5 * mando.drop).toFixed(3);
+    if (!luz) laser.style.opacity = intensidadLaser.toFixed(3);
+    else laser.style.removeProperty('opacity');
 
     // Al bajar, el rig se atenúa y sube con el truss: la noche sigue abajo.
     const prog = Math.min(scrollY / Math.max(alto, 1), 1);
@@ -122,6 +158,7 @@ export function hero(): void {
   // Las luces se cierran sobre el título y, justo cuando lo cruzan, el
   // título se enciende de forma gradual. Luego entra el resto en cadena.
   gsap.to(mando, { intro: 0, duration: 1.6, ease: 'power3.inOut', delay: 0.15 });
+  gsap.to(mando, { nivel: 1, duration: 1.4, ease: 'power2.out' });
   titulo.setAttribute('data-in', '');
   gsap.fromTo(titulo, { filter: 'brightness(.16)' }, {
     filter: 'brightness(1)',

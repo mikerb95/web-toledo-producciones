@@ -1,9 +1,19 @@
 ---
-// Rig de luces del hero: un truss con cabezas móviles cuyos haces siguen al
-// cursor (o bailan solos al tempo), un abanico láser y un destello para el
-// "drop" al hacer clic. Todo decorativo (aria-hidden) y movido por
-// src/scripts/motion/hero.ts; sin JS queda un rig quieto con los haces
-// abiertos en abanico, que también se lee bien.
+// Rig de luces del hero: un truss de caja con cabezas móviles cuyos haces
+// siguen al cursor (o bailan solos al tempo), un abanico láser y un destello
+// para el "drop" al hacer clic. Todo decorativo (aria-hidden) y movido por
+// src/scripts/motion/hero.ts.
+//
+// Dos capas de luz:
+// - WebGL (rig-gl.ts): haces volumétricos con humo, brillo de lente y mancha
+//   en el piso. hero.ts pone data-gl en .rig cuando el lienzo está listo.
+// - CSS (.rig-haz y el SVG del láser): el respaldo sin WebGL, sin JS o con
+//   movimiento reducido. Queda un rig quieto con los haces en abanico.
+//
+// Los equipos (truss, base, yugo y cabeza) son SVG y valen para las dos.
+// Medidas que hero.ts necesita: el pivote de la cabeza está a 40 px bajo el
+// cordón inferior del truss (.rig-giro) y el lente a 16 px del pivote
+// (LENTE en hero.ts).
 //
 // Las cabezas marcadas con `escritorio` se esconden en móvil: cuatro haces en
 // 390 px ya llenan la pantalla.
@@ -17,8 +27,41 @@ const cabezas = [
 ];
 const lasers = Array.from({ length: 11 });
 ---
-<div class="rig" aria-hidden="true">
+<div class="rig" aria-hidden="true" data-rig>
+  <!-- Degradados compartidos por todos los SVG del rig -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="rig-tubo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#a39e93" />
+        <stop offset=".3" stop-color="#5d5951" />
+        <stop offset=".75" stop-color="#272520" />
+        <stop offset="1" stop-color="#121110" />
+      </linearGradient>
+      <linearGradient id="rig-metal" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4a4740" />
+        <stop offset=".45" stop-color="#25231f" />
+        <stop offset="1" stop-color="#0f0e0d" />
+      </linearGradient>
+      <linearGradient id="rig-brazo" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#1b1a17" />
+        <stop offset=".4" stop-color="#4c4942" />
+        <stop offset="1" stop-color="#141311" />
+      </linearGradient>
+      <radialGradient id="rig-cuerpo" cx=".38" cy=".3" r=".85">
+        <stop offset="0" stop-color="#57534b" />
+        <stop offset=".5" stop-color="#2a2824" />
+        <stop offset="1" stop-color="#0e0d0c" />
+      </radialGradient>
+      <pattern id="rig-celosia" patternUnits="userSpaceOnUse" width="30" height="32">
+        <path d="M0 24.5 L15 7.5 L30 24.5 M0 7.5 V24.5" fill="none" stroke="#56524a" stroke-width="1.7" stroke-linecap="round" />
+        <path d="M0 24.5 L15 7.5 L30 24.5" fill="none" stroke="#8d887d" stroke-opacity=".35" stroke-width=".6" transform="translate(0 -.6)" />
+      </pattern>
+    </defs>
+  </svg>
+
   <div class="rig-humo"></div>
+  <canvas class="rig-lienzo" data-rig-gl></canvas>
+
   <svg class="rig-laser" data-laser>
     <defs>
       <linearGradient id="rig-laser-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="900">
@@ -29,14 +72,40 @@ const lasers = Array.from({ length: 11 });
     </defs>
     {lasers.map(() => <line x1="0" y1="0" x2="0" y2="0" stroke="url(#rig-laser-fade)" stroke-width="1.2" />)}
   </svg>
-  <div class="rig-truss"></div>
+
+  <!-- Truss de caja: dos cordones con celosía en zigzag y nodos -->
+  <svg class="rig-truss" width="100%" height="32">
+    <rect x="0" y="1.5" width="100%" height="2" fill="#1d1c19" />
+    <rect x="0" y="6" width="100%" height="19" fill="url(#rig-celosia)" />
+    <rect x="0" y="4" width="100%" height="5" rx="2.5" fill="url(#rig-tubo)" />
+    <rect x="0" y="22" width="100%" height="5" rx="2.5" fill="url(#rig-tubo)" />
+  </svg>
+
   {cabezas.map((c) => (
-    <div class:list={['rig-cabeza', { 'rig-escritorio': c.escritorio }]} data-cabeza style={`left:${c.x}%;--color:${c.color}`}>
+    <div class:list={['rig-cabeza', { 'rig-escritorio': c.escritorio }]} data-cabeza data-color={c.color} style={`left:${c.x}%;--color:${c.color}`}>
+      <!-- Abrazadera, base y yugo (fijos) -->
+      <svg class="rig-fijo" viewBox="-22 -10 44 56" width="44" height="56">
+        <rect x="-7" y="-9" width="14" height="15" rx="2" fill="url(#rig-metal)" stroke="#000" stroke-opacity=".5" />
+        <rect x="-3" y="-11" width="6" height="4" rx="1" fill="#3b3833" />
+        <rect x="-20" y="4" width="40" height="13" rx="4" fill="url(#rig-metal)" stroke="#5a564e" stroke-opacity=".35" />
+        <rect x="-16" y="7.5" width="10" height="2.5" rx="1" fill="#0b0a09" />
+        <circle cx="13" cy="10.5" r="1.4" fill={c.color} opacity=".9" />
+        <rect x="-20" y="13" width="6.5" height="30" rx="3.2" fill="url(#rig-brazo)" />
+        <rect x="13.5" y="13" width="6.5" height="30" rx="3.2" fill="url(#rig-brazo)" />
+        <circle cx="-16.75" cy="40" r="2.6" fill="#0d0c0b" stroke="#6b675f" stroke-width=".8" />
+        <circle cx="16.75" cy="40" r="2.6" fill="#0d0c0b" stroke="#6b675f" stroke-width=".8" />
+      </svg>
       <div class="rig-giro" style={`transform:rotate(${c.a}deg)`}>
         <span class="rig-haz"></span>
-        <span class="rig-lente"></span>
+        <!-- Cabeza (gira): cuerpo con rejillas, bisel y lente encendido -->
+        <svg class="rig-cabeza-svg" viewBox="-14 -15 28 36" width="28" height="36">
+          <rect x="-12.5" y="-13.5" width="25" height="25" rx="9" fill="url(#rig-cuerpo)" stroke="#6b675f" stroke-opacity=".35" stroke-width=".7" />
+          <path d="M-7 -8 H7 M-8 -4.5 H8 M-8 -1 H8" stroke="#0c0b0a" stroke-width="1.3" stroke-linecap="round" />
+          <rect x="-10.5" y="8.5" width="21" height="8.5" rx="3" fill="#121110" stroke="#6b675f" stroke-opacity=".45" stroke-width=".7" />
+          <ellipse class="rig-lente" cx="0" cy="16" rx="8.5" ry="3.1" fill={c.color} />
+          <ellipse cx="0" cy="16" rx="3.2" ry="1.2" fill="#fff" opacity=".95" />
+        </svg>
       </div>
-      <span class="rig-yugo"></span>
     </div>
   ))}
   <div class="rig-flash" data-flash></div>
@@ -45,58 +114,54 @@ const lasers = Array.from({ length: 11 });
 <style>
   /* --rig-scroll (0 a 1) lo escribe hero.ts al bajar: el rig se atenúa y sube. */
   .rig { position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: calc(1 - var(--rig-scroll, 0) * .7); }
-  .rig-truss, .rig-cabeza { translate: 0 calc(var(--rig-scroll, 0) * -60px); }
+  .rig-truss, .rig-cabeza, .rig-lienzo { translate: 0 calc(var(--rig-scroll, 0) * -60px); }
 
-  /* Bruma de escenario: sin ella los haces parecen dibujados sobre negro. */
+  /* Bruma de escenario para el respaldo CSS (con WebGL el humo lo pone el shader). */
   .rig-humo {
-    position: absolute; inset: 0;
+    position: absolute; inset: 0; transition: opacity .9s ease;
     background:
       radial-gradient(70% 45% at 50% 18%, rgba(244,199,82,.07), transparent 70%),
       radial-gradient(50% 40% at 20% 60%, rgba(226,120,210,.05), transparent 70%),
       radial-gradient(50% 40% at 80% 55%, rgba(120,180,255,.05), transparent 70%);
   }
 
+  /* El lienzo suma luz (screen): su negro no tapa nada. Entra con un fundido
+     largo mientras los haces CSS se apagan, sin corte. */
+  .rig-lienzo { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: screen; opacity: 0; transition: opacity 1.1s ease; }
+  .rig[data-gl] .rig-lienzo { opacity: 1; }
+  .rig[data-gl] .rig-haz, .rig[data-gl] .rig-laser, .rig[data-gl] .rig-humo { opacity: 0; }
+
   .rig-truss {
-    position: absolute; left: -2%; right: -2%; top: 78px; height: 14px;
-    border-top: 1px solid rgba(255,255,255,.16);
-    border-bottom: 1px solid rgba(255,255,255,.16);
-    background:
-      repeating-linear-gradient(60deg, transparent 0 9px, rgba(255,255,255,.13) 9px 10px),
-      repeating-linear-gradient(-60deg, transparent 0 9px, rgba(255,255,255,.13) 9px 10px),
-      rgba(12,12,14,.9);
+    position: absolute; left: 0; top: 74px; display: block;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,.55));
   }
 
-  .rig-cabeza { position: absolute; top: 92px; width: 0; height: 0; }
-  .rig-yugo {
-    position: absolute; left: -13px; top: -2px; width: 26px; height: 12px;
-    border: 2px solid #2a2824; border-top: none; border-radius: 0 0 8px 8px;
-  }
-  .rig-giro { position: absolute; left: 0; top: 8px; width: 0; height: 0; transform-origin: 0 0; will-change: transform; }
-  .rig-lente {
-    position: absolute; left: -9px; top: -6px; width: 18px; height: 16px; border-radius: 4px 4px 9px 9px;
-    background: radial-gradient(circle at 50% 75%, #fff 0 2.5px, var(--color) 4px, #1a1916 7px);
-    box-shadow: 0 6px 18px -2px var(--color);
-  }
-  /* El haz es un cono (clip-path) con el centro más brillante (degradado
-     horizontal) que se apaga hacia abajo (máscara). Así tiene bordes suaves
-     sin pagar un filter: blur que se recalcule en cada giro. */
+  .rig-cabeza { position: absolute; top: 100px; width: 0; height: 0; }
+  .rig-fijo { position: absolute; left: -22px; top: -10px; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,.5)); }
+  .rig-giro { position: absolute; left: 0; top: 40px; width: 0; height: 0; transform-origin: 0 0; will-change: transform; }
+  .rig-cabeza-svg { position: absolute; left: -14px; top: -15px; overflow: visible; }
+  .rig-lente { filter: drop-shadow(0 0 4px var(--color)); }
+
+  /* Respaldo CSS: un cono (clip-path) con el centro más brillante que se apaga
+     hacia abajo (máscara). Sale del lente, 16 px bajo el pivote. */
   .rig-haz {
-    position: absolute; left: -170px; top: 4px; width: 340px; height: 135vh; min-height: 900px;
+    position: absolute; left: -170px; top: 16px; width: 340px; height: 135vh; min-height: 900px;
     clip-path: polygon(48.5% 0, 51.5% 0, 100% 100%, 0 100%);
     background: linear-gradient(90deg, transparent 8%, var(--color) 50%, transparent 92%);
     -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.95), rgba(0,0,0,.35) 45%, transparent 82%);
     mask-image: linear-gradient(180deg, rgba(0,0,0,.95), rgba(0,0,0,.35) 45%, transparent 82%);
     opacity: var(--haz, .34);
     mix-blend-mode: screen;
+    transition: opacity .9s ease;
   }
 
-  .rig-laser { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .32; mix-blend-mode: screen; }
+  .rig-laser { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .32; mix-blend-mode: screen; transition: opacity .9s ease; }
   .rig-flash { position: absolute; inset: 0; background: radial-gradient(80% 70% at 50% 30%, #fff4d6, rgba(244,199,82,.4) 50%, transparent 85%); opacity: 0; }
 
   @media (max-width: 700px) {
     .rig-escritorio { display: none; }
-    .rig-truss { top: 70px; }
-    .rig-cabeza { top: 84px; }
+    .rig-truss { top: 66px; }
+    .rig-cabeza { top: 92px; }
     .rig-haz { left: -120px; width: 240px; }
   }
 </style>
