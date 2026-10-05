@@ -83,10 +83,10 @@ void main() {
 
   // Humo: dos capas de fbm que derivan a distinta velocidad y se multiplican,
   // así hay bancos densos y huecos en vez de una niebla pareja.
-  vec2 q = p * 0.0038;
-  float humo = fbm(q + vec2(uT * 0.016, -uT * 0.032));
-  humo *= fbm(q * 1.9 + vec2(-uT * 0.027, uT * 0.011) + 5.2);
-  humo = 0.25 + 2.6 * humo;
+  vec2 q = p * 0.0026;
+  float humo = fbm(q + vec2(uT * 0.014, -uT * 0.03));
+  humo *= fbm(q * 2.3 + vec2(-uT * 0.03, uT * 0.012) + 5.2);
+  humo = 0.12 + 3.4 * humo;
 
   vec3 luz = vec3(0.0);
 
@@ -102,27 +102,27 @@ void main() {
 
     // Cono: radio que crece con la distancia, perfil gaussiano con borde que
     // se apaga (sin canto duro) y un núcleo fino más brillante.
-    float w = 6.0 + max(s, 0.0) * 0.15;
+    float w = 7.0 + max(s, 0.0) * 0.21;
     float e = abs(r) / w;
     float cono = exp(-e * e * 2.4) * (1.0 - smoothstep(0.75, 1.2, e));
     float nucleo = exp(-e * e * 26.0);
-    float largo = smoothstep(-4.0, 22.0, s) / (1.0 + max(s, 0.0) * 0.0024);
-    float haz = (cono * 0.42 * humo + nucleo * 0.30 * (0.55 + 0.45 * humo)) * largo;
+    float largo = smoothstep(-4.0, 22.0, s) / (1.0 + max(s, 0.0) * 0.0017);
+    float haz = (cono * 0.95 * humo + nucleo * 0.5 * (0.5 + 0.5 * humo)) * largo;
 
     // Mancha en el piso: donde el eje del haz corta la línea del piso.
     float piso = 0.0;
     if (d.y > 0.25) {
       float sh = (uPiso - h.y) / d.y;
       vec2 c = h.xy + d * sh;
-      float wh = 6.0 + sh * 0.15;
+      float wh = 7.0 + sh * 0.21;
       vec2 dp = vec2((p.x - c.x) / (wh * 1.25), (p.y - c.y) / (wh * 0.2));
       piso = exp(-dot(dp, dp)) * 0.55;
     }
 
     // Lente: brillo cercano, halo amplio y un destello horizontal anamórfico.
     float rl = length(v);
-    float lente = exp(-rl * 0.11) * 1.6 + exp(-rl * 0.025) * 0.16;
-    float destello = exp(-abs(v.y) * 0.45) * exp(-abs(v.x) * 0.014) * 0.10;
+    float lente = exp(-rl * 0.1) * 2.0 + exp(-rl * 0.022) * 0.32;
+    float destello = exp(-abs(v.y) * 0.4) * exp(-abs(v.x) * 0.011) * 0.16;
 
     luz += uCol[k] * ((haz + piso) * h.w + (lente + destello) * (0.35 + 0.65 * h.w));
   }
@@ -146,11 +146,11 @@ void main() {
 
   // Un poco de aire iluminado bajo el truss, para que el humo exista también
   // entre haces.
-  luz += vec3(0.95, 0.78, 0.45) * 0.022 * humo * exp(-p.y * 0.0045);
+  luz += vec3(0.95, 0.78, 0.45) * 0.05 * humo * exp(-p.y * 0.004);
 
   luz *= uNivel;
   // Tone mapping suave (sin recortes a blanco) y dither contra el bandeado.
-  vec3 c = 1.0 - exp(-luz * 1.15);
+  vec3 c = 1.0 - exp(-luz * 1.35);
   c += (hash(gl_FragCoord.xy + fract(uT) * 97.0) - 0.5) / 255.0;
   salida = vec4(c, 1.0);
 }`;

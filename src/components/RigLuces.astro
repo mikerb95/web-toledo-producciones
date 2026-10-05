@@ -11,19 +11,21 @@
 //   movimiento reducido. Queda un rig quieto con los haces en abanico.
 //
 // Los equipos (truss, base, yugo y cabeza) son SVG y valen para las dos.
-// Medidas que hero.ts necesita: el pivote de la cabeza está a 40 px bajo el
-// cordón inferior del truss (.rig-giro) y el lente a 16 px del pivote
-// (LENTE en hero.ts).
+// Medidas que hero.ts lee de las variables de .rig: --lente (del pivote de
+// la cabeza al centro del lente) y --apertura-laser (del borde superior del
+// proyector a su apertura). En móvil los equipos se dibujan al 72 % y esas
+// medidas se escalan con ellos.
 //
 // Las cabezas marcadas con `escritorio` se esconden en móvil: cuatro haces en
-// 390 px ya llenan la pantalla.
+// 390 px ya llenan la pantalla. `xm` es su posición en móvil, más abierta
+// para dejarle sitio al proyector láser del centro.
 const cabezas = [
-  { x: 9, color: '#F4C752', a: 26, escritorio: false },
-  { x: 25, color: '#E278D2', a: 14, escritorio: true },
-  { x: 41, color: '#FCE7A8', a: 6, escritorio: false },
-  { x: 59, color: '#78B4FF', a: -6, escritorio: false },
-  { x: 75, color: '#E278D2', a: -14, escritorio: true },
-  { x: 91, color: '#F4C752', a: -26, escritorio: false },
+  { x: 9, xm: 8, color: '#F4C752', a: 26, escritorio: false },
+  { x: 25, xm: 25, color: '#E278D2', a: 14, escritorio: true },
+  { x: 41, xm: 33, color: '#FCE7A8', a: 6, escritorio: false },
+  { x: 59, xm: 67, color: '#78B4FF', a: -6, escritorio: false },
+  { x: 75, xm: 75, color: '#E278D2', a: -14, escritorio: true },
+  { x: 91, xm: 92, color: '#F4C752', a: -26, escritorio: false },
 ];
 const lasers = Array.from({ length: 11 });
 ---
@@ -82,7 +84,7 @@ const lasers = Array.from({ length: 11 });
   </svg>
 
   {cabezas.map((c) => (
-    <div class:list={['rig-cabeza', { 'rig-escritorio': c.escritorio }]} data-cabeza data-color={c.color} style={`left:${c.x}%;--color:${c.color}`}>
+    <div class:list={['rig-cabeza', { 'rig-escritorio': c.escritorio }]} data-cabeza data-color={c.color} style={`--x:${c.x}%;--xm:${c.xm}%;--color:${c.color}`}>
       <!-- Abrazadera, base y yugo (fijos) -->
       <svg class="rig-fijo" viewBox="-22 -10 44 56" width="44" height="56">
         <rect x="-7" y="-9" width="14" height="15" rx="2" fill="url(#rig-metal)" stroke="#000" stroke-opacity=".5" />
@@ -108,12 +110,26 @@ const lasers = Array.from({ length: 11 });
       </div>
     </div>
   ))}
+  <!-- Proyector láser al centro del truss; el abanico sale de su apertura,
+       22 px bajo su borde superior (APERTURA_LASER en hero.ts). -->
+  <div class="rig-proyector" data-proyector>
+    <svg viewBox="-20 -8 40 26" width="40" height="26">
+      <rect x="-5" y="-8" width="10" height="8" rx="1.5" fill="url(#rig-metal)" />
+      <rect x="-18" y="0" width="36" height="12" rx="2.5" fill="url(#rig-metal)" stroke="#5a564e" stroke-opacity=".35" />
+      <path d="M-14 3.5 H-4 M-14 6.5 H-4" stroke="#0b0a09" stroke-width="1.2" stroke-linecap="round" />
+      <rect x="2" y="10" width="12" height="4" rx="1.5" fill="#0d0c0b" stroke="#6b675f" stroke-opacity=".5" stroke-width=".6" />
+      <circle cx="8" cy="14" r="1.6" fill="#FCE7A8" />
+    </svg>
+  </div>
   <div class="rig-flash" data-flash></div>
 </div>
 
 <style>
   /* --rig-scroll (0 a 1) lo escribe hero.ts al bajar: el rig se atenúa y sube. */
-  .rig { position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: calc(1 - var(--rig-scroll, 0) * .7); }
+  .rig {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: calc(1 - var(--rig-scroll, 0) * .7);
+    --lente: 16; --apertura-laser: 22;
+  }
   .rig-truss, .rig-cabeza, .rig-lienzo { translate: 0 calc(var(--rig-scroll, 0) * -60px); }
 
   /* Bruma de escenario para el respaldo CSS (con WebGL el humo lo pone el shader). */
@@ -130,13 +146,19 @@ const lasers = Array.from({ length: 11 });
   .rig-lienzo { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: screen; opacity: 0; transition: opacity 1.1s ease; }
   .rig[data-gl] .rig-lienzo { opacity: 1; }
   .rig[data-gl] .rig-haz, .rig[data-gl] .rig-laser, .rig[data-gl] .rig-humo { opacity: 0; }
+  /* Con motion, los haces CSS esperan apagados a que hero.ts decida: si hay
+     WebGL no se encienden nunca (si no, se verían, se apagarían y luego
+     entraría el WebGL: un parpadeo). Sin WebGL, hero.ts pone data-css. Si el
+     script falla, Base.astro quita .motion a los 4 s y se ven igual. */
+  :global(.motion) .rig:not([data-css]) .rig-haz,
+  :global(.motion) .rig:not([data-css]) .rig-laser { opacity: 0; }
 
   .rig-truss {
     position: absolute; left: 0; top: 74px; display: block;
     filter: drop-shadow(0 6px 10px rgba(0,0,0,.55));
   }
 
-  .rig-cabeza { position: absolute; top: 100px; width: 0; height: 0; }
+  .rig-cabeza { position: absolute; left: var(--x); top: 100px; width: 0; height: 0; }
   .rig-fijo { position: absolute; left: -22px; top: -10px; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,.5)); }
   .rig-giro { position: absolute; left: 0; top: 40px; width: 0; height: 0; transform-origin: 0 0; will-change: transform; }
   .rig-cabeza-svg { position: absolute; left: -14px; top: -15px; overflow: visible; }
@@ -156,12 +178,22 @@ const lasers = Array.from({ length: 11 });
   }
 
   .rig-laser { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .32; mix-blend-mode: screen; transition: opacity .9s ease; }
+  .rig-proyector { position: absolute; left: calc(50% - 8px); top: 92px; translate: 0 calc(var(--rig-scroll, 0) * -60px); }
+  .rig-proyector svg { position: absolute; left: -20px; top: 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,.5)); }
   .rig-flash { position: absolute; inset: 0; background: radial-gradient(80% 70% at 50% 30%, #fff4d6, rgba(244,199,82,.4) 50%, transparent 85%); opacity: 0; }
 
   @media (max-width: 700px) {
     .rig-escritorio { display: none; }
     .rig-truss { top: 66px; }
-    .rig-cabeza { top: 92px; }
-    .rig-haz { left: -120px; width: 240px; }
+    /* Equipos al 72 %: cada pieza escala desde su punto de anclaje, así el
+       pivote y el lente caen donde hero.ts los calcula. */
+    .rig { --lente: 11.5; --apertura-laser: 15.8; }
+    .rig-cabeza { left: var(--xm); top: 92px; }
+    .rig-fijo { transform-origin: 22px 10px; scale: .72; }
+    .rig-giro { top: 29px; }
+    .rig-cabeza-svg { transform-origin: 14px 15px; scale: .72; }
+    .rig-proyector { top: 86px; }
+    .rig-proyector svg { transform-origin: 20px 0; scale: .72; }
+    .rig-haz { left: -120px; top: 11.5px; width: 240px; }
   }
 </style>

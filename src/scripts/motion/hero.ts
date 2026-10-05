@@ -23,18 +23,20 @@ export function hero(): void {
   const rig = raiz.querySelector<HTMLElement>('[data-rig]')!;
   const lienzo = raiz.querySelector<HTMLCanvasElement>('[data-rig-gl]');
 
-  // Distancia del pivote de la cabeza al centro del lente (RigLuces.astro).
-  const LENTE = 16;
+  const proyector = raiz.querySelector<HTMLElement>('[data-proyector]');
+  // Distancia del pivote de la cabeza al centro del lente y del borde del
+  // proyector a su apertura. Las define RigLuces.astro (cambian en móvil).
+  let lente = 16;
+  let aperturaLaser = 22;
 
   // ── WebGL ──────────────────────────────────────────────────────────
   // Si se pierde el contexto (pasa, p. ej., si el proceso de GPU se reinicia),
   // se vuelve a los haces CSS con el mismo fundido.
   let luz: RigGL | null = null;
-  const apagarGL = () => { luz = null; rig.removeAttribute('data-gl'); };
-  if (lienzo) {
-    luz = crearRigGL(lienzo, apagarGL);
-    if (luz) rig.setAttribute('data-gl', '');
-  }
+  const apagarGL = () => { luz = null; rig.removeAttribute('data-gl'); rig.setAttribute('data-css', ''); };
+  if (lienzo) luz = crearRigGL(lienzo, apagarGL);
+  if (luz) rig.setAttribute('data-gl', '');
+  else rig.setAttribute('data-css', '');
 
   // ── Medidas (se rehacen al cambiar el tamaño) ──────────────────────
   let visibles: { el: HTMLElement; giro: HTMLElement; x: number; y: number; color: [number, number, number] }[] = [];
@@ -46,6 +48,9 @@ export function hero(): void {
     alto = r.height;
     laser.setAttribute('viewBox', `0 0 ${ancho} ${alto}`);
     luz?.medir(ancho, alto);
+    const estilo = getComputedStyle(rig);
+    lente = parseFloat(estilo.getPropertyValue('--lente')) || lente;
+    aperturaLaser = parseFloat(estilo.getPropertyValue('--apertura-laser')) || aperturaLaser;
     // (x, y) es el pivote de la cabeza, en medidas de maquetación (ajenas a
     // los transforms): de ahí cuelga el haz y hacia ahí se calcula el giro.
     visibles = cabezas
@@ -117,7 +122,7 @@ export function hero(): void {
       const intensidad = 0.26 + 0.12 * b + 0.25 * mando.drop;
       if (luz) {
         const rad = (angulos[i] * Math.PI) / 180;
-        haces[i] = { x: c.x - Math.sin(rad) * LENTE, y: c.y + Math.cos(rad) * LENTE, a: angulos[i], i: intensidad * 2.2, color: c.color };
+        haces[i] = { x: c.x - Math.sin(rad) * lente, y: c.y + Math.cos(rad) * lente, a: angulos[i], i: intensidad * 2.2, color: c.color };
       } else {
         c.el.style.setProperty('--haz', intensidad.toFixed(3));
       }
@@ -125,13 +130,14 @@ export function hero(): void {
     haces.length = n;
 
     // Láser: abanico desde el centro del truss que respira al compás.
+    // Sale de la apertura del proyector, colgado al centro del truss.
     const ex = ancho / 2;
-    const ey = visibles[0]?.y ?? 90;
+    const ey = proyector ? proyector.offsetTop + aperturaLaser : 110;
     const apertura = 0.35 + 0.25 * Math.sin(fase(t, 8) * Math.PI * 2) + 0.5 * mando.drop;
     const giro = 0.18 * Math.sin(fase(t, 16) * Math.PI * 2);
     const intensidadLaser = 0.16 + 0.14 * b + 0.5 * mando.drop;
     if (luz) {
-      luz.dibujar({ t, haces, nivel: mando.nivel, laser: { x: ex, y: ey, giro, apertura, i: intensidadLaser * 1.6 } });
+      luz.dibujar({ t, haces, nivel: mando.nivel, laser: { x: ex, y: ey, giro, apertura, i: intensidadLaser * 2.8 } });
     }
     const m = lineas.length;
     if (!luz) lineas.forEach((l, k) => {
